@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <title>Family Tree</title>
+<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -11,6 +12,7 @@
 <link rel="stylesheet" href="{{ asset('lib/bootstrap-5.3.3.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/base.css') }}">
 <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+<link rel="stylesheet" href="{{ asset('css/splash.css') }}">
 </head>
 <body>
 <section class="screen" id="scr-welcome" aria-label="Welcome">
@@ -55,10 +57,24 @@
     </div>
   </div>
 </section>
+<section class="screen" id="scr-splash" aria-label="Loading">
+  <svg class="splash-logo" viewBox="0 0 150 120" aria-hidden="true">
+    <rect class="c c1" x="8" y="8" width="58" height="34" rx="8" fill="#039be5"/>
+    <rect class="c c2" x="84" y="8" width="58" height="34" rx="8" fill="#fb8c00"/>
+    <path class="ln" d="M37 42v14h76V42M75 56v20" stroke="#9aa3ad" stroke-width="2.5" fill="none"/>
+    <rect class="g" x="46" y="76" width="58" height="34" rx="8" fill="none" stroke="#9aa3ad" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <rect class="gs" x="46" y="76" width="58" height="34" rx="8" fill="#039be5"/>
+  </svg>
+  <h1 class="splash-name wordmark">Family Tree</h1>
+  <div class="splash-msg" id="splashMsg" aria-live="polite">Opening the family archive…</div>
+  <div class="splash-bar"><i></i></div>
+  <div class="splash-foot">Tap to skip</div>
+</section>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <script src="{{ asset('lib/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('lib/bootstrap-5.3.3.bundle.min.js') }}"></script>
 <script src="{{ asset('js/core.js') }}"></script>
+<script src="{{ asset('js/splash.js') }}"></script>
 <script src="{{ asset('js/welcome.js') }}"></script>
 </body>
 </html>
