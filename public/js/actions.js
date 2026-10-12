@@ -71,7 +71,7 @@ $("#cfGo").on("click",()=>{
     Api.people.remove(ctxId).done(()=>{
       cfModal.hide();
       toast("Removed.","danger");
-      location.reload();
+      if(typeof Editor!=="undefined") Editor.personRemoved(ctxId);
     }).fail(xhr=>toast(apiErr(xhr),"danger"));
     return;
   }

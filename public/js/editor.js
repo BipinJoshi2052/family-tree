@@ -533,6 +533,12 @@ const Editor=(function(){
     peopleCount:()=>people.length,
     header(){ if(tree){ header(); } },
     renamed(name){ if(tree){ tree.name=name; header(); } },
+    personRemoved(id){
+      if(!tree) return;
+      people.forEach(q=>{ if(q.fid===id) q.fid=null; if(q.mid===id) q.mid=null; if(q.pids&&q.pids.includes(id)) q.pids=q.pids.filter(x=>x!==id); });
+      people=people.filter(q=>q.id!==id);
+      render(); header();
+    },
   };
 })();
 $("#eBack").on("click",()=>closeEditor());
