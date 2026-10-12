@@ -288,6 +288,18 @@ const Editor=(function(){
       });
       const n=normalizePerson(created);
       if(uploadBlob){ try{ const r=await Api.people.uploadPhoto(n.id,uploadBlob); n.img=r.img; }catch(_){ toast("Person added, but the photo couldn't be saved.","female"); } }
+      /* The server links both sides of a mother/father/partner relationship, but only the new
+         person's own record comes back in the response - mirror the other side(s) locally too,
+         or gensOf()'s generation-matching (which reads fid/mid/pids) sees a stale, one-sided view
+         and leaves the new relative parked at its default generation instead of next to `p`. */
+      if(rel==="partner"){
+        if(!p.pids.includes(n.id)) p.pids.push(n.id);
+      } else if(rel==="mother"||rel==="father"){
+        const slot=rel==="mother"?"mid":"fid", otherSlot=rel==="mother"?"fid":"mid";
+        p[slot]=n.id;
+        const other=byId[p[otherSlot]];
+        if(other){ if(!other.pids.includes(n.id)) other.pids.push(n.id); if(!n.pids.includes(other.id)) n.pids.push(other.id); }
+      }
       people.push(n); addModal.hide(); render(); header();
       const coName=(rel==="son"||rel==="daughter")&&$("#fCo").val()?` with ${byId[$("#fCo").val()].name}`:"";
       $(`#nodes .node[data-id="${n.id}"]`).addClass("fresh");
