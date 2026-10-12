@@ -34,6 +34,8 @@ const Editor=(function(){
     else { SPOUSE_GAP=60; SIB_GAP=34; CLUSTER_GAP=70; ROOT_GAP=160; ROWH=300; BUS_STEP=12; }
   }
   const LAYOUT_KEY=id=>"ftLayout:"+id;
+  let filterMode="all", visibleIds=null; // visibleIds: null = show everyone, else a Set of ids the "blood members" filter allows
+  const FILTER_KEY=id=>"ftFilter:"+id;
   const cx=id=>pos[id].x+CW/2;
   function arrange(members){
     if(members.length===1) return members;
@@ -212,7 +214,7 @@ const Editor=(function(){
     if(!p.fid) G.push({rel:"father",gender:"male",label:"Add Father",x:mid+14,y:py});
     const sg=p.gender==="male"?"female":"male"; let sx=q.x+CW+28, sy=q.y+(CH-GH)/2;
     if(overlaps(sx,sy,GW,GH)){ const lx=q.x-GW-28; if(!overlaps(lx,sy,GW,GH)) sx=lx; }
-    G.push({rel:"partner",gender:sg,label:p.gender==="male"?"Add Wife":"Add Husband",x:sx,y:sy});
+    if(filterMode!=="blood") G.push({rel:"partner",gender:sg,label:p.gender==="male"?"Add Wife":"Add Husband",x:sx,y:sy});
     G.push({rel:"son",gender:"male",label:"Add Son",x:mid-GW-14,y:cy});
     G.push({rel:"daughter",gender:"female",label:"Add Daughter",x:mid+14,y:cy});
     const nP=p.pids.filter(x=>byId[x]).length;
@@ -454,7 +456,7 @@ const Editor=(function(){
   /* search */
   let rl=[],ri=0;
   function search(){ const q=$("#search").val().trim().toLowerCase(); $("#nodes .node").removeClass("match"); if(!q){ $("#results").prop("hidden",true); return; }
-    rl=people.filter(p=>p.name.toLowerCase().includes(q)||(p.nameNe||"").includes(q)); ri=0; rl.forEach(p=>$(`#nodes .node[data-id="${p.id}"]`).addClass("match")); drawResults(); if(rl.length) centerOn(rl[0].id,Math.max(view.k,.6)); }
+    rl=people.filter(p=>(!visibleIds||visibleIds.has(p.id))&&(p.name.toLowerCase().includes(q)||(p.nameNe||"").includes(q))); ri=0; rl.forEach(p=>$(`#nodes .node[data-id="${p.id}"]`).addClass("match")); drawResults(); if(rl.length) centerOn(rl[0].id,Math.max(view.k,.6)); }
   function drawResults(){ $("#results").prop("hidden",false).html(rl.length? rl.map((p,i)=>`<button type="button" class="${i===ri?"active":""}" data-id="${p.id}"><span class="sw" style="background:var(--${p.gender})"></span>${esc(dn(p))}${altName(p)?` <small class="muted">${esc(altName(p))}</small>`:""}<span class="meta">Gen ${p._gen}${p.birthDate?` · ${yr(p.birthDate)}`:""}</span></button>`).join("") : '<div class="empty-r">No match. Try part of a first or last name.</div>'); }
   function pick(id){ $("#results").prop("hidden",true); $("#nodes .node").removeClass("match"); $("#search").val("").blur(); select(id,true); }
   $("#search").on("input",search).on("keydown",e=>{ if(!rl.length) return;
@@ -468,7 +470,21 @@ const Editor=(function(){
   const ICON_PLUS='<svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
   const ICON_INFO='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
   function render(){
-    index(); buildUnions(); computeGens(); layout();
+    index(); buildUnions(); computeGens();
+    /* "Blood members" filter: computeBloodMemberIds() needs the full-tree parentUnion/_u state
+       just built above, so it runs before we swap `people` down to the visible subset. Gens are
+       NOT recomputed on the subset - a person keeps the row their full-tree depth puts them in,
+       rather than rows shifting around just because some ancestors above them got hidden. Once the
+       filtered pass is rendered, people/byId/unions are rebuilt back to the full set so everything
+       else (search, details modal, ghosts for the selected node) keeps working off complete data -
+       only the drawn canvas is restricted. */
+    const allPeople=people;
+    if(filterMode==="blood"){
+      visibleIds=computeBloodMemberIds();
+      people=allPeople.filter(p=>visibleIds.has(p.id));
+      index(); buildUnions();
+    } else visibleIds=null;
+    layout();
     $world.css({width:BOUNDS.w,height:BOUNDS.h}).toggleClass("readonly",ro());
     $("#links,#glinks").attr({width:BOUNDS.w,height:BOUNDS.h,viewBox:`0 0 ${BOUNDS.w} ${BOUNDS.h}`});
     let s="";
@@ -490,6 +506,7 @@ const Editor=(function(){
         <div class="acts"><button class="act" data-act="add" title="Add a relative" aria-label="Add a relative to ${esc(p.name)}">${ICON_PLUS}</button><button class="act" data-act="info" title="Details" aria-label="Details for ${esc(p.name)}">${ICON_INFO}</button></div>
         <button class="close-x" data-act="close" aria-label="Close">×</button></div>`; });
     $("#nodes").html(h);
+    if(filterMode==="blood"){ people=allPeople; index(); buildUnions(); }
     applySelection();
   }
   const LANGS={en:{code:"EN",label:"English"},ne:{code:"ने",label:"नेपाली"}};
@@ -524,11 +541,26 @@ const Editor=(function(){
     $("#eName").text(tree.name);
     $("#eMeta").html(`${people.length} ${people.length===1?"person":"people"} · ${G} gen`);
     const it=(a,ico,l,cls="")=>`<li><button class="dropdown-item ${cls}" data-action="${a}" data-id="${tree.id}">${ico}${l}</button></li>`;
-    $("#eMenu").html(`<li><button class="dropdown-item" id="eSummaryBtn">${I.act}Summary</button></li>`+'<li><hr class="dropdown-divider"></li>'+
+    $("#eMenu").html(`<li><button class="dropdown-item" id="eSummaryBtn">${I.act}Summary</button></li>`+
+      `<li><button class="dropdown-item" id="eFilterBtn">${I.filter}Filter${filterMode==="blood"?'<span class="pill" style="font-size:9px">Blood members</span>':""}</button></li>`+
+      '<li><hr class="dropdown-divider"></li>'+
       it("rename",I.edit,"Rename tree")+
       '<li><hr class="dropdown-divider"></li>'+layoutMenuHtml()+
       '<li><hr class="dropdown-divider"></li>'+it("delete",I.trash,"Delete tree","danger"));
   }
+  const filterModal=new bootstrap.Modal("#filterModal");
+  $("#eMenu").on("click","#eFilterBtn",()=>{
+    $(`input[name="flMode"][value="${filterMode}"]`).prop("checked",true);
+    filterModal.show();
+  });
+  $("#filterForm").on("submit",function(e){
+    e.preventDefault();
+    filterMode=$("input[name=flMode]:checked").val();
+    try{ localStorage.setItem(FILTER_KEY(tree.id),filterMode); }catch(_){}
+    filterModal.hide();
+    render(); header();
+    toast(filterMode==="blood"?"Showing blood members only - spouses are hidden.":"Showing everyone.");
+  });
 
   return {
     open(t,r,fresh){ tree=t; role=r; people=t.people; selected=null;
@@ -536,6 +568,8 @@ const Editor=(function(){
       lang = neOn() ? ((saved==="en"||saved==="ne")?saved:(t.defaultLang==="ne"?"ne":"en")) : "en";
       let savedLayout=null; try{ savedLayout=localStorage.getItem(LAYOUT_KEY(t.id)); }catch(_){}
       layoutMode = savedLayout==="tree" ? "tree" : "default";
+      let savedFilter=null; try{ savedFilter=localStorage.getItem(FILTER_KEY(t.id)); }catch(_){}
+      filterMode = savedFilter==="blood" ? "blood" : "all";
       $("#search").val(""); $("#results").prop("hidden",true);
       render(); header(); fit(false);
       if(fresh&&people.length===1){ select(people[0].id,true); toast("Your tree is ready. Tap a dashed card to add the first relative.","ok"); } },

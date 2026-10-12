@@ -123,6 +123,19 @@
   </div>
 </div>
 
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="flTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <form class="modal-content" id="filterForm">
+      <div class="modal-header"><h5 class="modal-title" id="flTitle">Filter</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div>
+      <div class="modal-body d-grid gap-2">
+        <label class="acct"><input class="form-check-input m-0" type="radio" name="flMode" value="all" checked><span><b>All</b><small>Everyone in the tree, including spouses who married in.</small></span></label>
+        <label class="acct"><input class="form-check-input m-0" type="radio" name="flMode" value="blood"><span><b>Blood members</b><small>Hides spouses - only people related by descent are shown.</small></span></label>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-quiet" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-go">Save</button></div>
+    </form>
+  </div>
+</div>
+
 <script>window.TREE = @json(['id' => $tree->id, 'name' => $tree->name, 'default_lang' => $tree->default_lang]);</script>
 <script src="{{ asset('lib/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('lib/bootstrap-5.3.3.bundle.min.js') }}"></script>
