@@ -163,7 +163,7 @@ const Editor=(function(){
     : `<svg width="${size}" height="${size}" viewBox="0 0 40 40" fill="${dashed?"none":"currentColor"}" stroke="${dashed?"currentColor":"none"}" stroke-width="2"><path d="M8 40c0-8 5-13 12-13s12 5 12 13"/><circle cx="20" cy="16" r="7"/></svg>`;
   function avatar(p,size){
     const sil=`<div class="sil">${SIL(p.gender,Math.round(size*.82))}</div>`;
-    if(typeof p.img==="string"&&p.img.startsWith("images/")) return sil+`<img src="${esc(imgUrl(p.img))}" alt="" onerror="this.remove()">`;
+    if(typeof p.img==="string"&&p.img.startsWith("images/")) return sil+`<img src="${esc(imgUrl(p.img,p.updatedAt))}" alt="" onerror="this.remove()">`;
     const src=p.img===A?portrait(p):p.img; return src? sil+`<img src="${esc(src)}" alt="" onerror="this.remove()">` : sil; }
   const dateLine=p=> p.status==="deceased"? `${p.birthDate?yr(p.birthDate):"?"} – ${p.deathDate?yr(p.deathDate):"?"}` : (p.birthDate?`b. ${fmt(p.birthDate)}`:"Birth date unknown");
 
@@ -287,7 +287,7 @@ const Editor=(function(){
         status:st, death_date:st==="deceased"?($("#fDeath").val()||null):null,
       });
       const n=normalizePerson(created);
-      if(uploadBlob){ try{ const r=await Api.people.uploadPhoto(n.id,uploadBlob); n.img=r.img; }catch(_){ toast("Person added, but the photo couldn't be saved.","female"); } }
+      if(uploadBlob){ try{ const r=await Api.people.uploadPhoto(n.id,uploadBlob); n.img=r.img; n.updatedAt=Date.now(); }catch(_){ toast("Person added, but the photo couldn't be saved.","female"); } }
       /* The server links both sides of a mother/father/partner relationship, but only the new
          person's own record comes back in the response - mirror the other side(s) locally too,
          or gensOf()'s generation-matching (which reads fid/mid/pids) sees a stale, one-sided view
@@ -412,12 +412,12 @@ const Editor=(function(){
   $("#detBody").on("click","[data-goto]",function(){ const id=$(this).data("goto"); openDetails(id); select(id,true); });
   $("#detLocate").on("click",()=>{ detModal.hide(); select(detId,true); });
   $("#dPhoto").on("change",async function(){ const f=this.files[0]; this.value=""; if(!f||!detId||!tree) return; const p=byId[detId];
-    try{ const r=await cropPhoto(f); const res=await Api.people.uploadPhoto(p.id,r.blob); p.img=res.img;
+    try{ const r=await cropPhoto(f); const res=await Api.people.uploadPhoto(p.id,r.blob); p.img=res.img; p.updatedAt=Date.now();
       render(); paintDetail();
       toast(`Saved ${p.name}'s photo.`,"ok"); }
     catch(e){ toast("Couldn't save that photo: "+(e.message||apiErr(e)||e),"danger"); } });
   $("#detBody").on("click","#dPhotoDel",async function(){ const p=byId[detId];
-    try{ await Api.people.removePhoto(p.id); p.img=""; render(); paintDetail(); toast(`Removed ${p.name}'s photo.`); }
+    try{ await Api.people.removePhoto(p.id); p.img=""; p.updatedAt=Date.now(); render(); paintDetail(); toast(`Removed ${p.name}'s photo.`); }
     catch(e){ toast("Couldn't remove that photo.","danger"); } });
   $("#detBody").on("click","#detEditBtn",()=>paintDetailEdit());
   $("#detBody").on("click","#detRemoveBtn",function(){

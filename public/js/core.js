@@ -61,7 +61,10 @@ const A="@auto";
 
 /* A person's `img` is either a storage-relative path we uploaded ("images/<user id>/<person id>.jpg"),
    the "@auto" placeholder sentinel, a plain URL/data-URI (from an imported JSON file), or empty. */
-const imgUrl=path=>"/storage/"+path.split("/").map(encodeURIComponent).join("/");
+/* `v` busts the browser cache when a photo is replaced - the stored path is always the same
+   images/<user id>/<person id>.jpg regardless of how many times the photo's been changed, so
+   without a version the browser just keeps showing whatever it first fetched for that URL. */
+const imgUrl=(path,v)=>"/storage/"+path.split("/").map(encodeURIComponent).join("/")+(v?`?v=${v}`:"");
 
 /* tree-card generation numbering + collaborator avatar stack: used by trees.js (My trees cards)
    and editor.js (its own layout generations + header collaborator stack) */

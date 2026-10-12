@@ -19,6 +19,7 @@ function normalizePerson(p) {
     status: p.status, deathDate: p.death_date || "", birthplace: p.birthplace || "",
     phone: p.phone || "", location: p.location || "", residency: p.residency || "local",
     bio: p.bio || "", img: p.img || "", pids: p.pids || [], fid: p.father_id || null, mid: p.mother_id || null,
+    updatedAt: p.updated_at ? new Date(p.updated_at).getTime() : 0,
   };
 }
 
