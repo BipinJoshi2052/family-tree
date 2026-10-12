@@ -12,7 +12,7 @@ function closeEditor(){ location.href="/trees"; }
 
 const ntModal=$("#newTreeModal").length?new bootstrap.Modal("#newTreeModal"):null;
 const rnModal=new bootstrap.Modal("#renameModal"), cfModal=new bootstrap.Modal("#confirmModal");
-let ctxId=null;
+let ctxId=null, ctxKind="tree";
 $(document).on("click","[data-action]",function(e){
   const a=$(this).data("action"); let id=$(this).data("id");
   if($(this).data("ctx")==="editor") id=Editor.treeId();
@@ -26,7 +26,7 @@ $(document).on("click","[data-action]",function(e){
     open:()=>openTree(id),
     rename:()=>{ ctxId=id; const t=typeof Trees!=="undefined"?Trees.find(x=>x.id===id):null; $("#rnName").val(t?t.name:(typeof Editor!=="undefined"?Editor.treeName():"")).removeClass("is-invalid"); rnModal.show(); },
     import:()=>$("#importFiles").trigger("click"),
-    delete:()=>{ const t=typeof Trees!=="undefined"?Trees.find(x=>x.id===id):null; ctxId=id;
+    delete:()=>{ const t=typeof Trees!=="undefined"?Trees.find(x=>x.id===id):null; ctxId=id; ctxKind="tree";
       const name=t?t.name:(typeof Editor!=="undefined"?Editor.treeName():"This tree"), count=t?t.people_count:(typeof Editor!=="undefined"?Editor.peopleCount():0);
       $("#cfTitle").text("Delete this tree?"); $("#cfGo").text("Delete tree");
       $("#cfBody").html(`<p class="mb-0"><b>${esc(name)}</b> and its ${count} people will be permanently removed.</p>`); cfModal.show(); },
@@ -65,8 +65,16 @@ $("#renameForm").on("submit",function(e){ e.preventDefault(); const n=$("#rnName
     toast("Renamed.","ok");
   }).fail(xhr=>toast(apiErr(xhr),"danger"));
 });
-/* confirm delete (shared) */
+/* confirm delete (shared): ctxKind picks whether #cfGo deletes a tree or a person */
 $("#cfGo").on("click",()=>{
+  if(ctxKind==="person"){
+    Api.people.remove(ctxId).done(()=>{
+      cfModal.hide();
+      toast("Removed.","danger");
+      location.reload();
+    }).fail(xhr=>toast(apiErr(xhr),"danger"));
+    return;
+  }
   Api.trees.remove(ctxId).done(()=>{
     cfModal.hide();
     toast("Deleted.","danger");

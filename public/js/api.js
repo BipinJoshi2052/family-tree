@@ -38,6 +38,7 @@ const Api = {
     list: (treeId) => $.get(`/api/trees/${treeId}/people`).then(rows => rows.map(normalizePerson)),
     add: (treeId, data) => $.post(`/api/trees/${treeId}/people`, data),
     update: (id, data) => $.ajax({ url: `/api/people/${id}`, method: "PATCH", data }),
+    remove: (id) => $.ajax({ url: `/api/people/${id}`, method: "DELETE" }),
     uploadPhoto: (id, blob) => {
       const fd = new FormData();
       fd.append("photo", blob, "photo.jpg");

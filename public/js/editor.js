@@ -355,6 +355,7 @@ const Editor=(function(){
     const removeBtn=(p.img&&p.img!==A)?'<button type="button" class="btn btn-quiet btn-sm" id="dPhotoDel">Remove</button>':"";
     const photoActions=ro()?"":`<div class="d-flex flex-wrap gap-2 justify-content-center mt-3"><label class="btn btn-quiet btn-sm mb-0" for="dPhoto">${p.img&&p.img!==A?"Change photo":"Upload photo"}</label>${removeBtn}</div>`;
     const editBtn=ro()?"":`<button type="button" class="ibtn" id="detEditBtn" aria-label="Edit ${esc(p.name)}'s details" title="Edit details">${I.edit}</button>`;
+    const removeSec=ro()?"":`<div class="d-sec"><button type="button" class="btn btn-quiet btn-sm" id="detRemoveBtn" style="color:#ff8a80">${I.trash}<span class="ms-1">Remove ${esc(first(p))} from this tree</span></button></div>`;
     return `<div class="d-hero" style="--c:var(--${p.gender});--cd:var(--${p.gender}-deep)"><div><div class="d-photo">${avatar(p,140)}</div>${photoActions}</div>
       <div style="min-width:0"><div class="d-flex align-items-center gap-2 flex-wrap"><h2 class="d-name" id="detName" style="margin-bottom:0">${esc(dn(p))}</h2>${editBtn}</div>${altName(p)?`<div class="alt-name">${esc(altName(p))}</div>`:""}<div class="d-sub">${dateLine(p)}${age(p)?` · ${age(p)}`:""}</div>
       <dl class="facts">${neOn()?`<dt>English name</dt><dd>${esc(p.name)}</dd><dt>नेपाली नाम</dt><dd>${p.nameNe?`<span lang="ne">${esc(p.nameNe)}</span>`:'<span class="muted">Not added · English name is shown</span>'}</dd>`:""}<dt>Gender</dt><dd><span class="sw-dot" style="background:var(--${p.gender})"></span>${p.gender==="male"?"Male":"Female"}</dd>
@@ -367,7 +368,8 @@ const Editor=(function(){
       <div class="d-sec"><h6>Parents</h6>${ancestors||'<p class="muted mb-0">No parents recorded.</p>'}</div>
       <div class="d-sec"><h6>Spouses (${sps.length})</h6>${sps.length?`<div class="d-flex flex-wrap gap-3">${sps.map(plink).join("")}</div>`:'<p class="muted mb-0">No spouse recorded.</p>'}</div>
       <div class="d-sec"><h6>Children by spouse</h6>${groups||'<p class="muted mb-0">No children recorded.</p>'}</div>
-      <div class="d-sec"><h6>Biography</h6><p class="bio">${p.bio?esc(p.bio):'<span class="muted">No notes yet.</span>'}</p></div>`;
+      <div class="d-sec"><h6>Biography</h6><p class="bio">${p.bio?esc(p.bio):'<span class="muted">No notes yet.</span>'}</p></div>
+      ${removeSec}`;
   }
   function detEditHtml(p){
     return `<form id="detEditForm" novalidate class="d-grid gap-3">
@@ -406,6 +408,12 @@ const Editor=(function(){
     try{ await Api.people.removePhoto(p.id); p.img=""; render(); paintDetail(); toast(`Removed ${p.name}'s photo.`); }
     catch(e){ toast("Couldn't remove that photo.","danger"); } });
   $("#detBody").on("click","#detEditBtn",()=>paintDetailEdit());
+  $("#detBody").on("click","#detRemoveBtn",function(){
+    const p=byId[detId]; ctxId=p.id; ctxKind="person";
+    $("#cfTitle").text("Remove this person?"); $("#cfGo").text("Remove");
+    $("#cfBody").html(`<p class="mb-0"><b>${esc(dn(p))}</b> will be permanently removed. Any children keep their place in the tree but lose this recorded parent.</p>`);
+    detModal.hide(); cfModal.show();
+  });
   $("#detBody").on("click","#deCancel",()=>paintDetail());
   $("#detBody").on("change","input[name=deStatus]",function(){ $("#deDeathWrap").prop("hidden",this.value!=="deceased"); });
   $("#detBody").on("submit","#detEditForm",async function(e){

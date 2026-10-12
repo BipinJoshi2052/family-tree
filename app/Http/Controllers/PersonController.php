@@ -69,6 +69,37 @@ class PersonController extends Controller
     }
 
     /**
+     * Remove a person from the tree. Children keep their place but lose this recorded parent
+     * (the father_id/mother_id foreign keys are set null on delete); any spouse's own `pids`
+     * list - a plain JSON column, not a foreign key - is cleaned up here instead.
+     */
+    public function destroy(Request $request, Person $person): JsonResponse
+    {
+        abort_unless($person->tree->user_id === $request->user()->id, 404);
+
+        if ($person->tree->people()->count() <= 1) {
+            return response()->json(['message' => 'A tree needs at least one person. Delete the tree itself instead.'], 422);
+        }
+
+        DB::transaction(function () use ($person) {
+            foreach ($person->pids ?? [] as $spouseId) {
+                $spouse = Person::find($spouseId);
+                if ($spouse) {
+                    $spouse->pids = collect($spouse->pids ?? [])->reject(fn ($id) => $id === $person->id)->values()->all();
+                    $spouse->save();
+                }
+            }
+
+            $person->deletePhotoFile();
+            $person->delete();
+        });
+
+        $person->tree->touch();
+
+        return response()->json(['ok' => true]);
+    }
+
+    /**
      * Update a person's own details (not their relationships).
      */
     public function update(Request $request, Person $person): JsonResponse
