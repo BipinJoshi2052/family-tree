@@ -1,0 +1,13 @@
+{
+  "app": "Family Tree",
+  "note": "List of the tree files in this folder. The app keeps it up to date.",
+  "trees": [
+    "Karim Family.json",
+    "Novak side (draft).json",
+    "Ortiz Family.json",
+    "Shah Family.json",
+    "Shrestha Family.json",
+    "Shrestha Lineage.json",
+    "Whitmore-Reed Family.json"
+  ]
+}

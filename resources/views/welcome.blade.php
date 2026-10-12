@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Family Tree</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+Devanagari:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="{{ asset('lib/bootstrap-5.3.3.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/base.css') }}">
+<link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+</head>
+<body>
+<section class="screen" id="scr-welcome" aria-label="Welcome">
+  <div class="wl">
+    <div class="wl-top">
+      <span class="wordmark" style="font-size:1.05rem">Family Tree</span>
+      <button class="wl-skip" id="wlSkip">Skip</button>
+    </div>
+    <div class="wl-stage" id="wlStage">
+      <div class="slide on" data-i="0">
+        <div class="illo" aria-hidden="true">
+          <svg width="320" height="210" viewBox="0 0 320 210" style="position:absolute;inset:0;width:100%;height:100%"><path d="M127 63v16h66V63M160 79v18M95 97h130M95 97v18M160 97v18M225 97v18M95 145v16h-38v12M95 161h38v12" stroke="#5c6570" stroke-width="1.6" fill="none"/></svg>
+          <div class="mini m" style="left:60px;top:33px">Harold</div><div class="mini f" style="left:166px;top:33px">Margaret</div>
+          <div class="mini m" style="left:56px;top:115px">Robert</div><div class="mini f" style="left:126px;top:115px;padding-right:8px">Alice</div><div class="mini m" style="left:192px;top:115px">Daniel</div>
+          <div class="mini f" style="left:20px;top:173px">Sarah</div><div class="mini m" style="left:102px;top:173px">Michael</div>
+        </div>
+        <h2>Every branch of your family in one place</h2>
+        <p>Grandparents, cousins, second marriages and half-siblings, laid out generation by generation.</p>
+      </div>
+      <div class="slide" data-i="1">
+        <div class="illo" aria-hidden="true">
+          <svg viewBox="0 0 320 210" style="position:absolute;inset:0;width:100%;height:100%"><path d="M160 58v-18M160 136v20M220 97h22" stroke="#9aa3ad" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/></svg>
+          <div class="mini gh f" style="left:70px;top:18px">Add Mother</div><div class="mini gh" style="left:170px;top:18px">Add Father</div>
+          <div class="mini m" style="left:100px;top:80px;height:40px;font-size:12px;padding-left:34px;width:118px;box-shadow:0 0 0 2px #1b1e22,0 0 0 4px #fff">Daniel</div>
+          <div class="mini gh f" style="left:228px;top:84px">Add Wife</div>
+          <div class="mini gh" style="left:70px;top:158px">Add Son</div><div class="mini gh f" style="left:166px;top:158px">Add Daughter</div>
+        </div>
+        <h2>Tap a person, add a relative</h2>
+        <p>Dashed cards appear around whoever you select. Tap one to add a parent, a spouse or a child.</p>
+      </div>
+      <div class="slide" data-i="2">
+        <div class="illo" aria-hidden="true" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+          <div class="stack" style="transform:scale(1.6)"><span class="uav" style="background:#039be5">MW</span><span class="uav" style="background:#fb8c00">AN</span><span class="uav" style="background:#7e57c2">NK</span><span class="uav" style="background:#26a69a">PS</span></div>
+        </div>
+        <h2>Free to use, no card needed</h2>
+        <p>Create your account and start building your tree in a couple of minutes.</p>
+      </div>
+    </div>
+    <div class="wl-dots" id="wlDots"><i class="on"></i><i></i><i></i></div>
+    <div class="wl-actions" id="wlActions">
+      <button class="btn btn-go" id="wlNext">Next</button>
+    </div>
+  </div>
+</section>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="{{ asset('lib/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('lib/bootstrap-5.3.3.bundle.min.js') }}"></script>
+<script src="{{ asset('js/core.js') }}"></script>
+<script src="{{ asset('js/welcome.js') }}"></script>
+</body>
+</html>

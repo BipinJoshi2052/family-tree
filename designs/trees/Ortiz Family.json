@@ -1,0 +1,109 @@
+{
+  "app": "Family Tree",
+  "version": 1,
+  "id": "t-ortiz",
+  "name": "Ortiz Family",
+  "role": "owner",
+  "created": "2026-09-02T08:20:48.909Z",
+  "updated": "2026-10-09T08:20:48.909Z",
+  "starred": false,
+  "access": "link",
+  "defaultLang": "en",
+  "collaborators": [
+    {
+      "name": "Michael Whitmore",
+      "email": "michael.whitmore@example.com",
+      "role": "owner",
+      "status": "active",
+      "me": true
+    },
+    {
+      "name": "Diego Ortiz",
+      "email": "diego@example.com",
+      "role": "editor",
+      "status": "active"
+    }
+  ],
+  "people": [
+    {
+      "id": "samuel",
+      "name": "Samuel Ortiz",
+      "gender": "male",
+      "birthDate": "1960-10-13",
+      "status": "living",
+      "birthplace": "Seville, Spain",
+      "img": "@auto",
+      "pids": [
+        "ruth"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "ruth",
+      "name": "Ruth Hayes",
+      "gender": "female",
+      "birthDate": "1964-02-26",
+      "status": "living",
+      "birthplace": "Truro, England",
+      "img": "@auto",
+      "pids": [
+        "samuel"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "diego",
+      "name": "Diego Ortiz",
+      "gender": "male",
+      "birthDate": "1996-05-27",
+      "status": "living",
+      "birthplace": "Exeter, England",
+      "img": "@auto",
+      "pids": [
+        "leila2"
+      ],
+      "bio": "",
+      "fid": "samuel",
+      "mid": "ruth"
+    },
+    {
+      "id": "leila2",
+      "name": "Leila Haddad",
+      "gender": "female",
+      "birthDate": "1997-02-08",
+      "status": "living",
+      "birthplace": "Beirut, Lebanon",
+      "img": "@auto",
+      "pids": [
+        "diego"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "noah",
+      "name": "Noah Ortiz",
+      "gender": "male",
+      "birthDate": "2022-01-30",
+      "status": "living",
+      "birthplace": "",
+      "img": "",
+      "pids": [],
+      "bio": "",
+      "fid": "diego",
+      "mid": "leila2"
+    },
+    {
+      "id": "nora",
+      "name": "Nora Ortiz",
+      "gender": "female",
+      "birthDate": "2024-04-17",
+      "status": "living",
+      "birthplace": "",
+      "img": "@auto",
+      "pids": [],
+      "bio": "",
+      "fid": "diego",
+      "mid": "leila2"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "app": "Family Tree",
+  "version": 1,
+  "id": "t-novak",
+  "name": "Novak side (draft)",
+  "role": "owner",
+  "created": "2026-10-03T08:20:48.909Z",
+  "updated": "2026-10-03T08:20:48.909Z",
+  "starred": false,
+  "access": "private",
+  "defaultLang": "en",
+  "collaborators": [
+    {
+      "name": "Michael Whitmore",
+      "email": "michael.whitmore@example.com",
+      "role": "owner",
+      "status": "active",
+      "me": true
+    }
+  ],
+  "people": [
+    {
+      "id": "pavel",
+      "name": "Pavel Novak",
+      "gender": "male",
+      "birthDate": "1948-05-02",
+      "status": "living",
+      "birthplace": "Brno, Czechia",
+      "img": "@auto",
+      "pids": [
+        "jana"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "jana",
+      "name": "Jana Novak",
+      "gender": "female",
+      "birthDate": "1950-09-14",
+      "status": "living",
+      "birthplace": "Olomouc, Czechia",
+      "img": "",
+      "pids": [
+        "pavel"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "anna",
+      "name": "Anna Novak",
+      "gender": "female",
+      "birthDate": "1976-09-03",
+      "status": "living",
+      "birthplace": "Brno, Czechia",
+      "img": "@auto",
+      "pids": [],
+      "bio": "",
+      "fid": "pavel",
+      "mid": "jana"
+    }
+  ]
+}

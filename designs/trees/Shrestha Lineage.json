@@ -1,0 +1,1122 @@
+{
+  "app": "Family Tree",
+  "version": 1,
+  "id": "t-shrestha-lineage",
+  "name": "Shrestha Lineage",
+  "role": "owner",
+  "created": "2026-10-12T08:17:51.338Z",
+  "updated": "2026-10-12T08:17:51.338Z",
+  "starred": false,
+  "access": "private",
+  "defaultLang": "ne",
+  "collaborators": [],
+  "people": [
+    {
+      "id": "p001",
+      "name": "Dhan Shrestha",
+      "nameNe": "धन श्रेष्ठ",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "bio": "One of the first three brothers (तीन दाजुभाइ)."
+    },
+    {
+      "id": "p002",
+      "name": "Dhan Jung Shrestha",
+      "nameNe": "धनजङ्ग श्रेष्ठ",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "bio": "One of the first three brothers (तीन दाजुभाइ)."
+    },
+    {
+      "id": "p003",
+      "name": "Nir Jung Shrestha",
+      "nameNe": "निरजङ्ग श्रेष्ठ",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "bio": "One of the first three brothers (तीन दाजुभाइ)."
+    },
+    {
+      "id": "p004",
+      "name": "Laxmi Narayan",
+      "nameNe": "लक्ष्मीनारायण",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p001"
+    },
+    {
+      "id": "p005",
+      "name": "Raj Man",
+      "nameNe": "राजमान",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p004"
+    },
+    {
+      "id": "p006",
+      "name": "Til Jung",
+      "nameNe": "तिलजङ्ग",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p005"
+    },
+    {
+      "id": "p007",
+      "name": "Khatan",
+      "nameNe": "खटन",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p006"
+    },
+    {
+      "id": "p008",
+      "name": "Krishna Bahadur (Paley)",
+      "nameNe": "कृष्णबहादुर (पाले)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p007"
+    },
+    {
+      "id": "p009",
+      "name": "Indra Bahadur",
+      "nameNe": "इन्द्रबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p008"
+    },
+    {
+      "id": "p010",
+      "name": "Shree Ram",
+      "nameNe": "श्रीराम",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p009"
+    },
+    {
+      "id": "p011",
+      "name": "Dhan Bahadur",
+      "nameNe": "धनबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p010"
+    },
+    {
+      "id": "p012",
+      "name": "Santa Kumar",
+      "nameNe": "सन्तकुमार",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p011"
+    },
+    {
+      "id": "p013",
+      "name": "Shiv Lal",
+      "nameNe": "शिवलाल",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p012"
+    },
+    {
+      "id": "p014",
+      "name": "Bhim Bahadur",
+      "nameNe": "भीमबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p013"
+    },
+    {
+      "id": "p015",
+      "name": "Chakra Bahadur",
+      "nameNe": "चक्रबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p014"
+    },
+    {
+      "id": "p016",
+      "name": "Buddhi Bahadur",
+      "nameNe": "बुद्धिबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p015"
+    },
+    {
+      "id": "p017",
+      "name": "Bhola Bahadur",
+      "nameNe": "भोलाबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p016"
+    },
+    {
+      "id": "p018",
+      "name": "Sundar Bahadur",
+      "nameNe": "सुन्दरबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p017"
+    },
+    {
+      "id": "p019",
+      "name": "Chatra Bahadur",
+      "nameNe": "छत्रबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p018"
+    },
+    {
+      "id": "p020",
+      "name": "Hari Bahadur",
+      "nameNe": "हरिबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p019"
+    },
+    {
+      "id": "p021",
+      "name": "Ram Bahadur",
+      "nameNe": "रामबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p020"
+    },
+    {
+      "id": "p022",
+      "name": "Shyam Bahadur",
+      "nameNe": "श्यामबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p021"
+    },
+    {
+      "id": "p023",
+      "name": "Jit Bahadur",
+      "nameNe": "जीतबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p022"
+    },
+    {
+      "id": "p024",
+      "name": "Prem Nath",
+      "nameNe": "प्रेमनाथ",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p023"
+    },
+    {
+      "id": "p025",
+      "name": "Lila Nath",
+      "nameNe": "लीलानाथ",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p024"
+    },
+    {
+      "id": "p026",
+      "name": "Bhishnu",
+      "nameNe": "विष्णु",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p025"
+    },
+    {
+      "id": "p027",
+      "name": "Ram Dayal",
+      "nameNe": "रामदयाल",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p026"
+    },
+    {
+      "id": "p028",
+      "name": "Lahurey",
+      "nameNe": "लाहुरे",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p027"
+    },
+    {
+      "id": "p029",
+      "name": "Guthurey",
+      "nameNe": "गुथुरे",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p028"
+    },
+    {
+      "id": "p030",
+      "name": "Amar Bahadur (Saney)",
+      "nameNe": "अमरबहादुर (साने)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p029"
+    },
+    {
+      "id": "p031",
+      "name": "Akal Bahadur",
+      "nameNe": "अक्कल बहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p030"
+    },
+    {
+      "id": "p032",
+      "name": "Jung Bahadur",
+      "nameNe": "जङ्गबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p031"
+    },
+    {
+      "id": "p033",
+      "name": "Baburam",
+      "nameNe": "बाबुराम",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p032"
+    },
+    {
+      "id": "p034",
+      "name": "Parshuram",
+      "nameNe": "परशुराम",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p033"
+    },
+    {
+      "id": "p035",
+      "name": "Hari Ram",
+      "nameNe": "हरिराम",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p034"
+    },
+    {
+      "id": "p036",
+      "name": "Bala Ram",
+      "nameNe": "बलराम",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p035"
+    },
+    {
+      "id": "p037",
+      "name": "Susey",
+      "nameNe": "सुसे",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p036"
+    },
+    {
+      "id": "p038",
+      "name": "Bhotu",
+      "nameNe": "भोटु",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p037"
+    },
+    {
+      "id": "p039",
+      "name": "Bhakta Bahadur",
+      "nameNe": "भक्तबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p038"
+    },
+    {
+      "id": "p040",
+      "name": "Ratan Bahadur",
+      "nameNe": "रत्नबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p039"
+    },
+    {
+      "id": "p041",
+      "name": "Manavdhwaj",
+      "nameNe": "मानवध्वज",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p040"
+    },
+    {
+      "id": "p042",
+      "name": "Debi Bahadur",
+      "nameNe": "देवीबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p041"
+    },
+    {
+      "id": "p043",
+      "name": "Brish Bahadur",
+      "nameNe": "वृषबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p042"
+    },
+    {
+      "id": "p044",
+      "name": "Khadga Bahadur (Bhurungey)",
+      "nameNe": "खड्गबहादुर (भुरुङ्गे)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p043"
+    },
+    {
+      "id": "p045",
+      "name": "Tikhey",
+      "nameNe": "तिखे",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p044"
+    },
+    {
+      "id": "p046",
+      "name": "Dal Bahadur (Sete)",
+      "nameNe": "दलबहादुर (सेते)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p045"
+    },
+    {
+      "id": "p047",
+      "name": "Krishna Hari",
+      "nameNe": "कृष्णहरि",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p046"
+    },
+    {
+      "id": "p048",
+      "name": "Amar (Kaley)",
+      "nameNe": "अमर (काले)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p047"
+    },
+    {
+      "id": "p049",
+      "name": "Padam Bahadur",
+      "nameNe": "पदमबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p048"
+    },
+    {
+      "id": "p050",
+      "name": "Shyam Bahadur",
+      "nameNe": "श्यामबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p049"
+    },
+    {
+      "id": "p051",
+      "name": "Bir Bahadur",
+      "nameNe": "वीरबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p050"
+    },
+    {
+      "id": "p052",
+      "name": "Birdhwaj",
+      "nameNe": "वीरध्वज",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p051"
+    },
+    {
+      "id": "p053",
+      "name": "Bhairav Bahadur",
+      "nameNe": "भैरवबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p052"
+    },
+    {
+      "id": "p054",
+      "name": "Shree Maan",
+      "nameNe": "श्रीमान्",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p053"
+    },
+    {
+      "id": "p055",
+      "name": "Ganga Bahadur",
+      "nameNe": "गङ्गाबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p054"
+    },
+    {
+      "id": "p056",
+      "name": "Nar Bahadur",
+      "nameNe": "नरबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p055"
+    },
+    {
+      "id": "p057",
+      "name": "Padam Bahadur (Kaley)",
+      "nameNe": "पदमबहादुर (काले)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p056"
+    },
+    {
+      "id": "p058",
+      "name": "Sanak Bahadur",
+      "nameNe": "सनकबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p057"
+    },
+    {
+      "id": "p059",
+      "name": "Dhanmaan",
+      "nameNe": "धनमान",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p058"
+    },
+    {
+      "id": "p060",
+      "name": "Mulda Shree Man",
+      "nameNe": "मुल्दा श्रीमान्",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p059"
+    },
+    {
+      "id": "p061",
+      "name": "Lokmaan",
+      "nameNe": "लोकमान",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p060"
+    },
+    {
+      "id": "p062",
+      "name": "Dal Bahadur (Musunchey)",
+      "nameNe": "दलबहादुर (मुसुन्चे)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p061"
+    },
+    {
+      "id": "p063",
+      "name": "Bijuley",
+      "nameNe": "बिजुले",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p062"
+    },
+    {
+      "id": "p064",
+      "name": "Man Bahadur",
+      "nameNe": "मानबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p063"
+    },
+    {
+      "id": "p065",
+      "name": "Chakra Maan",
+      "nameNe": "चक्रमान",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p064"
+    },
+    {
+      "id": "p066",
+      "name": "Parsa Muni",
+      "nameNe": "पर्सामुनि",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p065"
+    },
+    {
+      "id": "p067",
+      "name": "Lalbir",
+      "nameNe": "लालवीर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p066"
+    },
+    {
+      "id": "p068",
+      "name": "Amar Bahadur",
+      "nameNe": "अमरबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p067"
+    },
+    {
+      "id": "p069",
+      "name": "Ratan Bahadur (Dambarey)",
+      "nameNe": "रत्नबहादुर (डम्बरे)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p068"
+    },
+    {
+      "id": "p070",
+      "name": "Sunmaan",
+      "nameNe": "सुनमान",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p069"
+    },
+    {
+      "id": "p071",
+      "name": "Dharmey",
+      "nameNe": "धर्मे",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p070"
+    },
+    {
+      "id": "p072",
+      "name": "Gore",
+      "nameNe": "गोरे",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p071"
+    },
+    {
+      "id": "p073",
+      "name": "Duryodhan",
+      "nameNe": "दुर्योधन",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p072"
+    },
+    {
+      "id": "p074",
+      "name": "Harka Bir",
+      "nameNe": "हर्कवीर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p073"
+    },
+    {
+      "id": "p075",
+      "name": "Sita Ram",
+      "nameNe": "सीताराम",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p074"
+    },
+    {
+      "id": "p076",
+      "name": "Jit Bahadur",
+      "nameNe": "जीतबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p075"
+    },
+    {
+      "id": "p077",
+      "name": "Hira Laal",
+      "nameNe": "हीरालाल",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p076"
+    },
+    {
+      "id": "p078",
+      "name": "Rudra Bahadur",
+      "nameNe": "रुद्रबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p077"
+    },
+    {
+      "id": "p079",
+      "name": "Krishna Bahadur",
+      "nameNe": "कृष्णबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p078"
+    },
+    {
+      "id": "p080",
+      "name": "Chandra Bahadur",
+      "nameNe": "चन्द्रबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p079"
+    },
+    {
+      "id": "p081",
+      "name": "Kaley",
+      "nameNe": "काले",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p080"
+    },
+    {
+      "id": "p082",
+      "name": "Padam Bahadur",
+      "nameNe": "पदमबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p081"
+    },
+    {
+      "id": "p083",
+      "name": "Bishnu Bahadur",
+      "nameNe": "विष्णुबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p082"
+    },
+    {
+      "id": "p084",
+      "name": "Narayan",
+      "nameNe": "नारायण",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p083"
+    },
+    {
+      "id": "p085",
+      "name": "Narendra",
+      "nameNe": "नरेन्द्र",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p084"
+    },
+    {
+      "id": "p086",
+      "name": "Bibek",
+      "nameNe": "विवेक",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p085"
+    },
+    {
+      "id": "p087",
+      "name": "Bipin",
+      "nameNe": "विपिन",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p086"
+    },
+    {
+      "id": "p088",
+      "name": "Ganesh Bahadur",
+      "nameNe": "गणेशबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p087"
+    },
+    {
+      "id": "p089",
+      "name": "Krishna",
+      "nameNe": "कृष्ण",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p088"
+    },
+    {
+      "id": "p090",
+      "name": "Navaraj",
+      "nameNe": "नवराज",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p089"
+    },
+    {
+      "id": "p091",
+      "name": "Shivraj",
+      "nameNe": "शिवराज",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p090"
+    },
+    {
+      "id": "p092",
+      "name": "Saroj",
+      "nameNe": "सरोज",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p091"
+    },
+    {
+      "id": "p093",
+      "name": "Manoj",
+      "nameNe": "मनोज",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p092"
+    },
+    {
+      "id": "p094",
+      "name": "Bharat",
+      "nameNe": "भरत",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p093"
+    },
+    {
+      "id": "p095",
+      "name": "Nirajan",
+      "nameNe": "निराजन",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p094"
+    },
+    {
+      "id": "p096",
+      "name": "Ranjan",
+      "nameNe": "रञ्जन",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p095"
+    },
+    {
+      "id": "p097",
+      "name": "Arun (Battu)",
+      "nameNe": "अरुण (बट्टु)",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p096"
+    },
+    {
+      "id": "p098",
+      "name": "Nabin",
+      "nameNe": "नवीन",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p097"
+    },
+    {
+      "id": "p099",
+      "name": "Nirmal",
+      "nameNe": "निर्मल",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p098"
+    },
+    {
+      "id": "p100",
+      "name": "Purshottam",
+      "nameNe": "पुरुषोत्तम",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p099"
+    },
+    {
+      "id": "p101",
+      "name": "Milan",
+      "nameNe": "मिलन",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p100"
+    },
+    {
+      "id": "p102",
+      "name": "Ram Hari",
+      "nameNe": "रामहरि",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p101"
+    },
+    {
+      "id": "p103",
+      "name": "Abhisekh",
+      "nameNe": "अभिषेक",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p102"
+    },
+    {
+      "id": "p104",
+      "name": "Keshav",
+      "nameNe": "केशव",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p103"
+    },
+    {
+      "id": "p105",
+      "name": "Anup",
+      "nameNe": "अनुप",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p104"
+    },
+    {
+      "id": "p106",
+      "name": "Ashok",
+      "nameNe": "अशोक",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p105"
+    },
+    {
+      "id": "p107",
+      "name": "Sushil",
+      "nameNe": "सुशील",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p106"
+    },
+    {
+      "id": "p108",
+      "name": "Aayush",
+      "nameNe": "आयुष",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p107"
+    },
+    {
+      "id": "p109",
+      "name": "Ganga Bahadur",
+      "nameNe": "गङ्गाबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p108"
+    },
+    {
+      "id": "p110",
+      "name": "Pancha Bir",
+      "nameNe": "पञ्चवीर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p109"
+    },
+    {
+      "id": "p111",
+      "name": "Jit Maan",
+      "nameNe": "जीतमान",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p110"
+    },
+    {
+      "id": "p112",
+      "name": "Jung Bir",
+      "nameNe": "जङ्गवीर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p111"
+    },
+    {
+      "id": "p113",
+      "name": "Dil Bahadur",
+      "nameNe": "दिलबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p112"
+    },
+    {
+      "id": "p114",
+      "name": "Tul Dash",
+      "nameNe": "तुलदास",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p113"
+    },
+    {
+      "id": "p115",
+      "name": "Ganesh Bahadur",
+      "nameNe": "गणेशबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p114"
+    },
+    {
+      "id": "p116",
+      "name": "Bal Krishna",
+      "nameNe": "बालकृष्ण",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p115"
+    },
+    {
+      "id": "p117",
+      "name": "Ratan",
+      "nameNe": "रत्न",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p116"
+    },
+    {
+      "id": "p118",
+      "name": "Ram Bahadur",
+      "nameNe": "रामबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p117"
+    },
+    {
+      "id": "p119",
+      "name": "Ganga Bahadur",
+      "nameNe": "गङ्गाबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p118"
+    },
+    {
+      "id": "p120",
+      "name": "Dhan Maan Singh",
+      "nameNe": "धनमान सिंह",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p119"
+    },
+    {
+      "id": "p121",
+      "name": "Kaley",
+      "nameNe": "काले",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p120"
+    },
+    {
+      "id": "p122",
+      "name": "Prem Bahadur",
+      "nameNe": "प्रेमबहादुर",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p121"
+    },
+    {
+      "id": "p123",
+      "name": "Ishwar Laal",
+      "nameNe": "ईश्वरलाल",
+      "gender": "male",
+      "pids": [],
+      "img": "",
+      "fid": "p122"
+    }
+  ]
+}

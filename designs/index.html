@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Family Tree App</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+Devanagari:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="lib/bootstrap-5.3.3.min.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/splash.css">
+</head>
+<body>
+<section class="screen" id="scr-splash" aria-label="Loading">
+  <svg class="splash-logo" viewBox="0 0 150 120" aria-hidden="true">
+    <rect class="c c1" x="8" y="8" width="58" height="34" rx="8" fill="#039be5"/>
+    <rect class="c c2" x="84" y="8" width="58" height="34" rx="8" fill="#fb8c00"/>
+    <path class="ln" d="M37 42v14h76V42M75 56v20" stroke="#9aa3ad" stroke-width="2.5" fill="none"/>
+    <rect class="g" x="46" y="76" width="58" height="34" rx="8" fill="none" stroke="#9aa3ad" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <rect class="gs" x="46" y="76" width="58" height="34" rx="8" fill="#039be5"/>
+  </svg>
+  <h1 class="splash-name wordmark">Family Tree</h1>
+  <div class="splash-msg" id="splashMsg" aria-live="polite">Opening the family archive…</div>
+  <div class="splash-bar"><i></i></div>
+  <div class="splash-foot">Version 1.3 · Tap to skip</div>
+</section>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="lib/jquery-3.7.1.min.js"></script>
+<script src="lib/bootstrap-5.3.3.bundle.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/splash.js"></script>
+</body>
+</html>

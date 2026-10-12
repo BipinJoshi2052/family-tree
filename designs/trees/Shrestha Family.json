@@ -1,0 +1,189 @@
+{
+  "app": "Family Tree",
+  "version": 1,
+  "id": "t-shrestha",
+  "name": "Shrestha Family",
+  "role": "owner",
+  "created": "2026-09-22T08:20:48.909Z",
+  "updated": "2026-10-12T07:20:48.909Z",
+  "starred": true,
+  "access": "private",
+  "defaultLang": "ne",
+  "collaborators": [
+    {
+      "name": "Michael Whitmore",
+      "email": "michael.whitmore@example.com",
+      "role": "owner",
+      "status": "active",
+      "me": true
+    },
+    {
+      "name": "Anish Shrestha",
+      "email": "anish.shrestha@example.com",
+      "role": "editor",
+      "status": "active"
+    }
+  ],
+  "people": [
+    {
+      "id": "ram",
+      "name": "Ram Bahadur Shrestha",
+      "gender": "male",
+      "birthDate": "1938-04-13",
+      "status": "deceased",
+      "birthplace": "Kathmandu, Nepal",
+      "img": "@auto",
+      "pids": [
+        "sita"
+      ],
+      "bio": "Ran a cloth shop in Asan for forty years.",
+      "nameNe": "राम बहादुर श्रेष्ठ",
+      "deathDate": "2009-11-02"
+    },
+    {
+      "id": "sita",
+      "name": "Sita Shrestha",
+      "gender": "female",
+      "birthDate": "1942-08-21",
+      "status": "deceased",
+      "birthplace": "Bhaktapur, Nepal",
+      "img": "@auto",
+      "pids": [
+        "ram"
+      ],
+      "bio": "Known across the tole for her yomari at Yomari Punhi.",
+      "nameNe": "सीता श्रेष्ठ",
+      "deathDate": "2016-02-14"
+    },
+    {
+      "id": "hari",
+      "name": "Hari Shrestha",
+      "gender": "male",
+      "birthDate": "1962-01-30",
+      "status": "living",
+      "birthplace": "Kathmandu, Nepal",
+      "img": "@auto",
+      "pids": [
+        "gita"
+      ],
+      "bio": "Took over the family shop and added a second branch in Patan.",
+      "nameNe": "हरि श्रेष्ठ",
+      "fid": "ram",
+      "mid": "sita"
+    },
+    {
+      "id": "gita",
+      "name": "Gita Shrestha",
+      "gender": "female",
+      "birthDate": "1966-06-09",
+      "status": "living",
+      "birthplace": "Bhaktapur, Nepal",
+      "img": "",
+      "pids": [
+        "hari"
+      ],
+      "bio": "",
+      "nameNe": "गीता श्रेष्ठ"
+    },
+    {
+      "id": "laxmi",
+      "name": "Laxmi Maharjan",
+      "gender": "female",
+      "birthDate": "1965-10-17",
+      "status": "living",
+      "birthplace": "Kathmandu, Nepal",
+      "img": "@auto",
+      "pids": [
+        "binod"
+      ],
+      "bio": "Secondary school teacher in Lalitpur.",
+      "nameNe": "लक्ष्मी महर्जन",
+      "fid": "ram",
+      "mid": "sita"
+    },
+    {
+      "id": "binod",
+      "name": "Binod Maharjan",
+      "gender": "male",
+      "birthDate": "1960-03-05",
+      "status": "living",
+      "birthplace": "Lalitpur, Nepal",
+      "img": "",
+      "pids": [
+        "laxmi"
+      ],
+      "bio": "",
+      "nameNe": "विनोद महर्जन"
+    },
+    {
+      "id": "anish",
+      "name": "Anish Shrestha",
+      "gender": "male",
+      "birthDate": "1990-12-01",
+      "status": "living",
+      "birthplace": "Kathmandu, Nepal",
+      "img": "@auto",
+      "pids": [
+        "priyanka"
+      ],
+      "bio": "Software engineer; keeps this tree up to date.",
+      "nameNe": "अनिश श्रेष्ठ",
+      "fid": "hari",
+      "mid": "gita"
+    },
+    {
+      "id": "priyanka",
+      "name": "Priyanka Rai",
+      "gender": "female",
+      "birthDate": "1992-05-22",
+      "status": "living",
+      "birthplace": "Dharan, Nepal",
+      "img": "@auto",
+      "pids": [
+        "anish"
+      ],
+      "bio": "No Nepali name added yet, so her English name shows in Nepali view."
+    },
+    {
+      "id": "sujata",
+      "name": "Sujata Shrestha",
+      "gender": "female",
+      "birthDate": "1994-09-14",
+      "status": "living",
+      "birthplace": "Kathmandu, Nepal",
+      "img": "@auto",
+      "pids": [],
+      "bio": "",
+      "nameNe": "सुजाता श्रेष्ठ",
+      "fid": "hari",
+      "mid": "gita"
+    },
+    {
+      "id": "rohan",
+      "name": "Rohan Maharjan",
+      "gender": "male",
+      "birthDate": "1988-07-07",
+      "status": "living",
+      "birthplace": "Lalitpur, Nepal",
+      "img": "",
+      "pids": [],
+      "bio": "",
+      "nameNe": "रोहन महर्जन",
+      "fid": "binod",
+      "mid": "laxmi"
+    },
+    {
+      "id": "aarya",
+      "name": "Aarya Shrestha",
+      "gender": "female",
+      "birthDate": "2020-02-29",
+      "status": "living",
+      "birthplace": "Kathmandu, Nepal",
+      "img": "@auto",
+      "pids": [],
+      "bio": "",
+      "fid": "anish",
+      "mid": "priyanka"
+    }
+  ]
+}

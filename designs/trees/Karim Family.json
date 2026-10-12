@@ -1,0 +1,114 @@
+{
+  "app": "Family Tree",
+  "version": 1,
+  "id": "t-karim",
+  "name": "Karim Family",
+  "role": "editor",
+  "owner": {
+    "name": "Nadia Karim",
+    "email": "nadia.karim@example.com"
+  },
+  "created": "2026-08-13T08:20:48.909Z",
+  "updated": "2026-10-12T03:20:48.909Z",
+  "starred": false,
+  "access": "private",
+  "defaultLang": "en",
+  "collaborators": [
+    {
+      "name": "Nadia Karim",
+      "email": "nadia.karim@example.com",
+      "role": "owner",
+      "status": "active"
+    },
+    {
+      "name": "Michael Whitmore",
+      "email": "michael.whitmore@example.com",
+      "role": "editor",
+      "status": "active",
+      "me": true
+    }
+  ],
+  "people": [
+    {
+      "id": "hassan",
+      "name": "Hassan Karim",
+      "gender": "male",
+      "birthDate": "1945-03-21",
+      "status": "deceased",
+      "birthplace": "Lahore, Pakistan",
+      "img": "@auto",
+      "pids": [
+        "amina"
+      ],
+      "bio": "",
+      "deathDate": "2019-12-01"
+    },
+    {
+      "id": "amina",
+      "name": "Amina Karim",
+      "gender": "female",
+      "birthDate": "1948-07-11",
+      "status": "living",
+      "birthplace": "Lahore, Pakistan",
+      "img": "@auto",
+      "pids": [
+        "hassan"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "nadia",
+      "name": "Nadia Karim",
+      "gender": "female",
+      "birthDate": "1968-11-29",
+      "status": "living",
+      "birthplace": "Manchester, England",
+      "img": "@auto",
+      "pids": [],
+      "bio": "",
+      "fid": "hassan",
+      "mid": "amina"
+    },
+    {
+      "id": "tariq",
+      "name": "Tariq Karim",
+      "gender": "male",
+      "birthDate": "1971-02-15",
+      "status": "living",
+      "birthplace": "",
+      "img": "",
+      "pids": [
+        "sana"
+      ],
+      "bio": "",
+      "fid": "hassan",
+      "mid": "amina"
+    },
+    {
+      "id": "sana",
+      "name": "Sana Malik",
+      "gender": "female",
+      "birthDate": "1974-06-30",
+      "status": "living",
+      "birthplace": "",
+      "img": "@auto",
+      "pids": [
+        "tariq"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "yusuf",
+      "name": "Yusuf Karim",
+      "gender": "male",
+      "birthDate": "2005-10-09",
+      "status": "living",
+      "birthplace": "",
+      "img": "@auto",
+      "pids": [],
+      "bio": "",
+      "fid": "tariq",
+      "mid": "sana"
+    }
+  ]
+}

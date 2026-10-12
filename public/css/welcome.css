@@ -1,0 +1,24 @@
+/* welcome.html only */
+#scr-welcome{align-items:center;justify-content:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom,0px))}
+.wl{width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center;gap:22px;height:100%;max-height:720px}
+.wl-top{width:100%;display:flex;justify-content:space-between;align-items:center}
+.wl-skip{background:none;border:0;color:var(--muted);font-weight:500;padding:6px 4px}
+.wl-skip:hover{color:var(--ink)}
+.wl-stage{flex:1;width:100%;position:relative;min-height:0}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center;opacity:0;transform:translateX(30px);transition:opacity .35s,transform .35s;pointer-events:none}
+.slide.on{opacity:1;transform:none;pointer-events:auto}
+.slide.off{transform:translateX(-30px)}
+.slide h2{font-weight:900;font-size:1.65rem;line-height:1.15;margin:0;text-wrap:balance}
+.slide p{color:var(--muted);font-size:1rem;line-height:1.55;margin:0;max-width:34ch}
+.illo{width:100%;max-width:320px;height:210px;border-radius:18px;background:var(--canvas);border:1px solid var(--edge);position:relative;overflow:hidden}
+.mini{position:absolute;height:30px;border-radius:7px;color:#fff;font-size:10.5px;font-weight:900;display:flex;align-items:center;padding:0 8px 0 30px;white-space:nowrap}
+.mini::before{content:"";position:absolute;left:5px;top:5px;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.35)}
+.mini.m{background:var(--male)}.mini.f{background:var(--female)}
+.mini.gh{background:rgba(27,30,34,.9);border:1.5px dashed var(--male);color:var(--male)}
+.mini.gh.f{border-color:var(--female);color:var(--female)}
+.mini.gh::before{background:none;border:1.5px dashed currentColor}
+.wl-dots{display:flex;gap:8px}
+.wl-dots i{width:8px;height:8px;border-radius:4px;background:var(--edge-2);transition:width .25s,background .25s}
+.wl-dots i.on{width:24px;background:var(--male)}
+.wl-actions{width:100%;display:grid;gap:10px}
+.wl-actions .btn{padding:12px}

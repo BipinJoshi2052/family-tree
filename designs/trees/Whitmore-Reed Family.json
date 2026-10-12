@@ -1,0 +1,470 @@
+{
+  "app": "Family Tree",
+  "version": 1,
+  "id": "t-whitmore",
+  "name": "Whitmore-Reed Family",
+  "role": "owner",
+  "created": "2026-06-14T08:20:48.909Z",
+  "updated": "2026-10-12T06:20:48.909Z",
+  "starred": true,
+  "access": "private",
+  "defaultLang": "en",
+  "collaborators": [
+    {
+      "name": "Michael Whitmore",
+      "email": "michael.whitmore@example.com",
+      "role": "owner",
+      "status": "active",
+      "me": true
+    },
+    {
+      "name": "Anna Novak",
+      "email": "anna.novak@example.com",
+      "role": "editor",
+      "status": "active"
+    },
+    {
+      "name": "Sarah Whitmore",
+      "email": "sarah.w@example.com",
+      "role": "viewer",
+      "status": "active"
+    },
+    {
+      "name": "Lucas Whitmore",
+      "email": "lucas.w@example.com",
+      "role": "editor",
+      "status": "invited"
+    }
+  ],
+  "people": [
+    {
+      "id": "harold",
+      "name": "Harold Whitmore",
+      "gender": "male",
+      "birthDate": "1921-03-14",
+      "status": "deceased",
+      "birthplace": "Bristol, England",
+      "img": "@auto",
+      "pids": [
+        "margaret",
+        "clara"
+      ],
+      "bio": "Merchant navy radio officer who settled ashore in 1949 and ran a hardware shop for thirty years. Widowed young, he remarried in 1960.",
+      "deathDate": "1994-11-02"
+    },
+    {
+      "id": "margaret",
+      "name": "Margaret Ellis",
+      "gender": "female",
+      "birthDate": "1924-07-30",
+      "status": "deceased",
+      "birthplace": "Bath, England",
+      "img": "@auto",
+      "pids": [
+        "harold"
+      ],
+      "bio": "Schoolteacher and church organist. Died at 33, leaving Harold with Robert and Alice.",
+      "deathDate": "1958-02-19"
+    },
+    {
+      "id": "clara",
+      "name": "Clara Benton",
+      "gender": "female",
+      "birthDate": "1930-05-08",
+      "status": "deceased",
+      "birthplace": "Cardiff, Wales",
+      "img": "",
+      "pids": [
+        "harold"
+      ],
+      "bio": "Bookkeeper who became Harold's second wife and the family's keeper of photo albums.",
+      "deathDate": "2011-09-23"
+    },
+    {
+      "id": "thomas",
+      "name": "Thomas Reed",
+      "gender": "male",
+      "birthDate": "1922-01-11",
+      "status": "deceased",
+      "birthplace": "Plymouth, England",
+      "img": "@auto",
+      "pids": [
+        "eleanor"
+      ],
+      "bio": "Dockyard engineer at Devonport.",
+      "deathDate": "1960-08-04"
+    },
+    {
+      "id": "eleanor",
+      "name": "Eleanor Vance",
+      "gender": "female",
+      "birthDate": "1926-10-02",
+      "status": "deceased",
+      "birthplace": "Exeter, England",
+      "img": "@auto",
+      "pids": [
+        "thomas",
+        "walter"
+      ],
+      "bio": "Ward sister in Exeter. Married Thomas Reed until his death, then Walter Hayes in 1962.",
+      "deathDate": "2015-04-17"
+    },
+    {
+      "id": "walter",
+      "name": "Walter Hayes",
+      "gender": "male",
+      "birthDate": "1925-12-19",
+      "status": "deceased",
+      "birthplace": "Truro, England",
+      "img": "",
+      "pids": [
+        "eleanor"
+      ],
+      "bio": "Postmaster in Truro and a keen sailor.",
+      "deathDate": "2003-06-30"
+    },
+    {
+      "id": "robert",
+      "name": "Robert Whitmore",
+      "gender": "male",
+      "birthDate": "1947-09-05",
+      "status": "deceased",
+      "birthplace": "Bristol, England",
+      "img": "@auto",
+      "pids": [
+        "helen"
+      ],
+      "bio": "Civil engineer on the Severn Bridge maintenance team.",
+      "deathDate": "2018-01-27",
+      "fid": "harold",
+      "mid": "margaret"
+    },
+    {
+      "id": "alice",
+      "name": "Alice Whitmore",
+      "gender": "female",
+      "birthDate": "1950-04-22",
+      "status": "living",
+      "birthplace": "Bristol, England",
+      "img": "@auto",
+      "pids": [],
+      "bio": "Retired midwife living in Bath.",
+      "fid": "harold",
+      "mid": "margaret"
+    },
+    {
+      "id": "sofia",
+      "name": "Sofia Marín",
+      "gender": "female",
+      "birthDate": "1963-08-14",
+      "status": "living",
+      "birthplace": "Valencia, Spain",
+      "img": "@auto",
+      "pids": [
+        "daniel"
+      ],
+      "bio": "Translator. Married Daniel in 1988; divorced 1994."
+    },
+    {
+      "id": "daniel",
+      "name": "Daniel Whitmore",
+      "gender": "male",
+      "birthDate": "1962-06-01",
+      "status": "living",
+      "birthplace": "Bristol, England",
+      "img": "@auto",
+      "pids": [
+        "sofia",
+        "nadia"
+      ],
+      "bio": "Architect in London with two marriages and three children.",
+      "fid": "harold",
+      "mid": "clara"
+    },
+    {
+      "id": "nadia",
+      "name": "Nadia Karim",
+      "gender": "female",
+      "birthDate": "1968-11-29",
+      "status": "living",
+      "birthplace": "Manchester, England",
+      "img": "@auto",
+      "pids": [
+        "daniel"
+      ],
+      "bio": "Paediatrician. Married Daniel in 1996."
+    },
+    {
+      "id": "grace",
+      "name": "Grace Whitmore",
+      "gender": "female",
+      "birthDate": "1965-03-17",
+      "status": "living",
+      "birthplace": "Bristol, England",
+      "img": "",
+      "pids": [],
+      "bio": "Marine biologist based in Aberdeen.",
+      "fid": "harold",
+      "mid": "clara"
+    },
+    {
+      "id": "helen",
+      "name": "Helen Reed",
+      "gender": "female",
+      "birthDate": "1949-12-09",
+      "status": "deceased",
+      "birthplace": "Plymouth, England",
+      "img": "@auto",
+      "pids": [
+        "robert"
+      ],
+      "bio": "Primary school headteacher who joined the Reed and Whitmore lines.",
+      "deathDate": "2020-05-12",
+      "fid": "thomas",
+      "mid": "eleanor"
+    },
+    {
+      "id": "james",
+      "name": "James Reed",
+      "gender": "male",
+      "birthDate": "1953-07-21",
+      "status": "living",
+      "birthplace": "Plymouth, England",
+      "img": "@auto",
+      "pids": [
+        "linda"
+      ],
+      "bio": "Harbour master at Newlyn.",
+      "fid": "thomas",
+      "mid": "eleanor"
+    },
+    {
+      "id": "linda",
+      "name": "Linda Cho",
+      "gender": "female",
+      "birthDate": "1957-01-30",
+      "status": "living",
+      "birthplace": "Vancouver, Canada",
+      "img": "",
+      "pids": [
+        "james"
+      ],
+      "bio": "Landscape painter in St Ives."
+    },
+    {
+      "id": "mark",
+      "name": "Mark Finley",
+      "gender": "male",
+      "birthDate": "1961-04-04",
+      "status": "living",
+      "birthplace": "Swansea, Wales",
+      "img": "",
+      "pids": [
+        "ruth"
+      ],
+      "bio": "Sound engineer; Ruth's first husband."
+    },
+    {
+      "id": "ruth",
+      "name": "Ruth Hayes",
+      "gender": "female",
+      "birthDate": "1964-02-26",
+      "status": "living",
+      "birthplace": "Truro, England",
+      "img": "@auto",
+      "pids": [
+        "mark",
+        "samuel"
+      ],
+      "bio": "Solicitor in Exeter, married twice, with a child from each marriage.",
+      "fid": "walter",
+      "mid": "eleanor"
+    },
+    {
+      "id": "samuel",
+      "name": "Samuel Ortiz",
+      "gender": "male",
+      "birthDate": "1960-10-13",
+      "status": "living",
+      "birthplace": "Seville, Spain",
+      "img": "@auto",
+      "pids": [
+        "ruth"
+      ],
+      "bio": "Chef and restaurant owner."
+    },
+    {
+      "id": "michael",
+      "name": "Michael Whitmore",
+      "gender": "male",
+      "birthDate": "1974-05-19",
+      "status": "living",
+      "birthplace": "Bristol, England",
+      "img": "@auto",
+      "pids": [
+        "anna"
+      ],
+      "bio": "Software developer and the family's amateur genealogist.",
+      "fid": "robert",
+      "mid": "helen"
+    },
+    {
+      "id": "anna",
+      "name": "Anna Novak",
+      "gender": "female",
+      "birthDate": "1976-09-03",
+      "status": "living",
+      "birthplace": "Brno, Czechia",
+      "img": "@auto",
+      "pids": [
+        "michael"
+      ],
+      "bio": "Violinist with the Bristol Philharmonic."
+    },
+    {
+      "id": "sarah",
+      "name": "Sarah Whitmore",
+      "gender": "female",
+      "birthDate": "1977-11-11",
+      "status": "living",
+      "birthplace": "Bristol, England",
+      "img": "",
+      "pids": [],
+      "bio": "Journalist in Edinburgh.",
+      "fid": "robert",
+      "mid": "helen"
+    },
+    {
+      "id": "lucas",
+      "name": "Lucas Whitmore",
+      "gender": "male",
+      "birthDate": "1990-02-08",
+      "status": "living",
+      "birthplace": "London, England",
+      "img": "@auto",
+      "pids": [
+        "priya"
+      ],
+      "bio": "Product designer who grew up between London and Valencia.",
+      "fid": "daniel",
+      "mid": "sofia"
+    },
+    {
+      "id": "priya",
+      "name": "Priya Shah",
+      "gender": "female",
+      "birthDate": "1991-07-14",
+      "status": "living",
+      "birthplace": "Leicester, England",
+      "img": "@auto",
+      "pids": [
+        "lucas"
+      ],
+      "bio": "Data scientist."
+    },
+    {
+      "id": "leila",
+      "name": "Leila Whitmore",
+      "gender": "female",
+      "birthDate": "1998-03-02",
+      "status": "living",
+      "birthplace": "London, England",
+      "img": "@auto",
+      "pids": [],
+      "bio": "Medical student at King's College London.",
+      "fid": "daniel",
+      "mid": "nadia"
+    },
+    {
+      "id": "omar",
+      "name": "Omar Whitmore",
+      "gender": "male",
+      "birthDate": "2001-12-20",
+      "status": "living",
+      "birthplace": "London, England",
+      "img": "",
+      "pids": [],
+      "bio": "Studying aeronautical engineering in Southampton.",
+      "fid": "daniel",
+      "mid": "nadia"
+    },
+    {
+      "id": "jordan",
+      "name": "Jordan Reed",
+      "gender": "male",
+      "birthDate": "1985-08-08",
+      "status": "living",
+      "birthplace": "Penzance, England",
+      "img": "@auto",
+      "pids": [],
+      "bio": "Illustrator and printmaker.",
+      "fid": "james",
+      "mid": "linda"
+    },
+    {
+      "id": "chloe",
+      "name": "Chloe Finley",
+      "gender": "female",
+      "birthDate": "1990-01-15",
+      "status": "living",
+      "birthplace": "Exeter, England",
+      "img": "@auto",
+      "pids": [],
+      "bio": "Primary school teacher.",
+      "fid": "mark",
+      "mid": "ruth"
+    },
+    {
+      "id": "diego",
+      "name": "Diego Ortiz",
+      "gender": "male",
+      "birthDate": "1996-05-27",
+      "status": "living",
+      "birthplace": "Exeter, England",
+      "img": "",
+      "pids": [],
+      "bio": "Sous chef in his father's restaurant.",
+      "fid": "samuel",
+      "mid": "ruth"
+    },
+    {
+      "id": "oliver",
+      "name": "Oliver Whitmore",
+      "gender": "male",
+      "birthDate": "2008-04-12",
+      "status": "living",
+      "birthplace": "Bristol, England",
+      "img": "@auto",
+      "pids": [],
+      "bio": "Plays cello and county-level rugby.",
+      "fid": "michael",
+      "mid": "anna"
+    },
+    {
+      "id": "mia",
+      "name": "Mia Whitmore",
+      "gender": "female",
+      "birthDate": "2011-10-30",
+      "status": "living",
+      "birthplace": "Bristol, England",
+      "img": "",
+      "pids": [],
+      "bio": "Keeps a notebook of every comet sighting.",
+      "fid": "michael",
+      "mid": "anna"
+    },
+    {
+      "id": "aarav",
+      "name": "Aarav Whitmore",
+      "gender": "male",
+      "birthDate": "2021-09-09",
+      "status": "living",
+      "birthplace": "London, England",
+      "img": "@auto",
+      "pids": [],
+      "bio": "The youngest member of the family.",
+      "fid": "lucas",
+      "mid": "priya"
+    }
+  ]
+}

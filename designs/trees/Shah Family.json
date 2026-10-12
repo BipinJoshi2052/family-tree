@@ -1,0 +1,113 @@
+{
+  "app": "Family Tree",
+  "version": 1,
+  "id": "t-shah",
+  "name": "Shah Family",
+  "role": "viewer",
+  "owner": {
+    "name": "Priya Shah",
+    "email": "priya.shah@example.com"
+  },
+  "created": "2026-09-12T08:20:48.909Z",
+  "updated": "2026-10-06T08:20:48.909Z",
+  "starred": false,
+  "access": "link",
+  "defaultLang": "en",
+  "collaborators": [
+    {
+      "name": "Priya Shah",
+      "email": "priya.shah@example.com",
+      "role": "owner",
+      "status": "active"
+    },
+    {
+      "name": "Michael Whitmore",
+      "email": "michael.whitmore@example.com",
+      "role": "viewer",
+      "status": "active",
+      "me": true
+    }
+  ],
+  "people": [
+    {
+      "id": "raj",
+      "name": "Raj Shah",
+      "gender": "male",
+      "birthDate": "1960-01-12",
+      "status": "living",
+      "birthplace": "Ahmedabad, India",
+      "img": "@auto",
+      "pids": [
+        "meera"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "meera",
+      "name": "Meera Shah",
+      "gender": "female",
+      "birthDate": "1963-08-04",
+      "status": "living",
+      "birthplace": "Leicester, England",
+      "img": "@auto",
+      "pids": [
+        "raj"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "priya",
+      "name": "Priya Shah",
+      "gender": "female",
+      "birthDate": "1991-07-14",
+      "status": "living",
+      "birthplace": "",
+      "img": "@auto",
+      "pids": [
+        "lucas"
+      ],
+      "bio": "",
+      "fid": "raj",
+      "mid": "meera"
+    },
+    {
+      "id": "arjun",
+      "name": "Arjun Shah",
+      "gender": "male",
+      "birthDate": "1994-03-28",
+      "status": "living",
+      "birthplace": "",
+      "img": "",
+      "pids": [],
+      "bio": "",
+      "fid": "raj",
+      "mid": "meera"
+    },
+    {
+      "id": "lucas",
+      "name": "Lucas Whitmore",
+      "gender": "male",
+      "birthDate": "1990-02-08",
+      "status": "living",
+      "birthplace": "",
+      "img": "@auto",
+      "pids": [
+        "priya"
+      ],
+      "bio": ""
+    },
+    {
+      "id": "aarav",
+      "name": "Aarav Whitmore",
+      "gender": "male",
+      "birthDate": "2021-09-09",
+      "status": "living",
+      "birthplace": "",
+      "img": "@auto",
+      "pids": [],
+      "bio": "",
+      "fid": "lucas",
+      "mid": "priya"
+    }
+  ]
+}

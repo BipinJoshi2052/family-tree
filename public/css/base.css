@@ -1,0 +1,101 @@
+/* Shared across every page: color system, resets, screen wrapper, buttons/forms/modals/dropdowns/toasts, Nepali-language bits, share/invite styling. */
+:root{
+  --bg:#16181b; --canvas:#1b1e22; --panel:#202429; --panel-2:#292e34; --edge:#353b43; --edge-2:#454c56;
+  --ink:#f3f5f7; --muted:#9aa3ad; --faint:#6b747e; --line:#5c6570; --line-hi:#e9eef2;
+  --male:#039be5; --male-deep:#0288d1; --female:#fb8c00; --female-deep:#f57c00;
+  --deceased:#e53935; --deceased-deep:#b71c1c;
+  --danger:#ef5350; --ok:#4caf50;
+  --f-body:"Roboto","Noto Sans Devanagari","Nirmala UI","Kohinoor Devanagari",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Roboto Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;overflow:hidden}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--male);outline-offset:2px}
+.muted{color:var(--muted)}
+.lang-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--edge)}
+.lang-row:first-of-type{border-top:0}
+.lang-badge{width:40px;height:40px;border-radius:10px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;flex:none}
+.lang-row .lbl{flex:1;min-width:0}
+.lang-row .lbl b{display:block;font-weight:500}
+.lang-row .lbl small{color:var(--muted)}
+.lang-row .form-check-input:disabled{opacity:.6}
+.alt-name{font-size:.9rem;color:var(--muted);margin:2px 0 6px}
+.lang-dd .dropdown-item.on{color:var(--ink)}
+.lang-dd .dropdown-item .chk{margin-left:auto;color:var(--male)}
+body:not(.ne-on) .ne-only{display:none!important}
+.lang-dd .note{padding:4px 10px;font-size:.78rem;color:var(--muted)}
+form[hidden],div[hidden].row{display:none!important}
+.d-grid{grid-template-columns:minmax(0,1fr)}
+.mono{font-family:var(--f-mono)}
+
+/* ===== page screen wrapper (each page is one full-screen "screen") ===== */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--bg);padding-top:env(safe-area-inset-top,0px);animation:scrIn .35s ease-out}
+@keyframes scrIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ===== shared bits ===== */
+.wordmark{font-weight:900;letter-spacing:-.01em}
+.btn-go{background:var(--male);border:0;color:#fff;font-weight:700;border-radius:8px;padding:9px 18px}
+.btn-go:hover,.btn-go:focus{background:var(--male-deep);color:#fff}
+.btn-go:disabled{background:var(--male-deep);color:#fff;opacity:.7}
+.btn-quiet{background:transparent;border:1px solid var(--edge);color:var(--ink);border-radius:8px;padding:8px 16px;font-weight:500}
+.btn-quiet:hover{background:var(--panel-2);color:var(--ink);border-color:var(--edge-2)}
+.btn-danger-solid{background:var(--danger);border:0;color:#fff;font-weight:700;border-radius:8px;padding:9px 18px}
+.btn-danger-solid:hover{filter:brightness(1.08);color:#fff;background:var(--danger)}
+.ibtn{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;background:transparent;border:1px solid transparent;color:var(--muted);position:relative;flex:none}
+.ibtn:hover{background:var(--panel-2);color:var(--ink)}
+.badge-dot{position:absolute;top:4px;right:4px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--female);color:#1b1e22;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.uav{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex:none;box-shadow:0 0 0 2px var(--bg)}
+.uav.lg{width:56px;height:56px;font-size:20px}
+.stack{display:flex}
+.stack .uav{width:26px;height:26px;font-size:10px;margin-left:-7px}
+.stack .uav:first-child{margin-left:0}
+.stack .more{background:var(--panel-2);color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--panel-2);color:var(--muted);white-space:nowrap}
+.pill.owner{background:color-mix(in srgb,var(--male) 18%,transparent);color:#6cc6f5}
+.pill.editor{background:color-mix(in srgb,var(--ok) 18%,transparent);color:#8fd694}
+.pill.viewer{background:color-mix(in srgb,var(--female) 18%,transparent);color:#ffb866}
+.pill.invited{background:color-mix(in srgb,var(--female) 14%,transparent);color:#ffb866}
+.form-label{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:6px}
+.form-control,.form-select{background-color:var(--canvas);border-color:var(--edge);color:var(--ink);border-radius:8px}
+.form-control:focus,.form-select:focus{background-color:var(--canvas);color:var(--ink);border-color:var(--c,var(--male));box-shadow:0 0 0 3px color-mix(in srgb,var(--c,var(--male)) 28%,transparent)}
+.form-control::placeholder{color:var(--faint)}
+.form-text{color:var(--muted)}
+.form-check-input{background-color:var(--canvas);border-color:var(--edge-2)}
+.form-check-input:checked{background-color:var(--male);border-color:var(--male)}
+.modal-content{background:var(--panel);color:var(--ink);border:1px solid var(--edge);border-radius:14px}
+.modal-header,.modal-footer{border-color:var(--edge)}
+.modal-title{font-weight:700;font-size:1.05rem}
+.dropdown-menu{background:var(--panel);border:1px solid var(--edge);--bs-dropdown-link-color:var(--ink);--bs-dropdown-link-hover-bg:var(--panel-2);--bs-dropdown-link-hover-color:var(--ink);--bs-dropdown-link-active-bg:var(--panel-2);--bs-dropdown-link-active-color:var(--ink);--bs-dropdown-divider-bg:var(--edge);font-size:.88rem;border-radius:10px;padding:6px;box-shadow:0 14px 34px rgba(0,0,0,.5)}
+.dropdown-item{border-radius:6px;display:flex;align-items:center;gap:10px;padding:7px 10px}
+.dropdown-item svg{color:var(--muted);flex:none}
+.dropdown-item.danger,.dropdown-item.danger svg{color:#ff8a80}
+.toasts{position:fixed;right:16px;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:3000;display:flex;flex-direction:column;gap:8px;max-width:calc(100% - 32px);pointer-events:none}
+.ntoast{background:var(--panel);border:1px solid var(--edge);border-left:4px solid var(--c,var(--male));border-radius:8px;padding:10px 14px;font-size:.86rem;box-shadow:0 12px 30px rgba(0,0,0,.5);animation:scrIn .25s ease-out;pointer-events:auto}
+
+/* ===== share / invite (used from both trees.html and editor.html) ===== */
+.linkbox{display:flex;gap:8px}
+.linkbox input{font-family:var(--f-mono);font-size:.82rem;flex:1;min-width:0}
+.access-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--edge)}
+.access-row:first-child{border-top:0}
+.access-row .who{flex:1;min-width:0}
+.access-row .who b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.access-row .who small{color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.access-row .form-select{width:auto;max-width:120px;flex:none;font-size:.82rem;padding-top:4px;padding-bottom:4px}
+.gen-access{display:flex;align-items:center;gap:12px;background:var(--canvas);border:1px solid var(--edge);border-radius:10px;padding:10px 12px}
+.gen-access .ico{width:36px;height:36px;border-radius:50%;background:var(--panel-2);display:flex;align-items:center;justify-content:center;color:var(--muted);flex:none}
+.chipbox{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--canvas);border:1px solid var(--edge);border-radius:8px;padding:6px;min-height:42px;cursor:text}
+.chipbox:focus-within{border-color:var(--male);box-shadow:0 0 0 3px rgba(3,155,229,.25)}
+.chipbox input{flex:1;min-width:140px;border:0;background:none;color:var(--ink);outline:none;padding:3px 4px}
+.echip{display:inline-flex;align-items:center;gap:6px;background:var(--panel-2);border-radius:999px;padding:3px 4px 3px 10px;font-size:.84rem}
+.echip.bad{background:color-mix(in srgb,var(--danger) 25%,transparent)}
+.echip button{border:0;background:none;color:var(--muted);width:20px;height:20px;border-radius:50%;line-height:1;padding:0}
+.echip button:hover{background:rgba(255,255,255,.1);color:var(--ink)}
+
+/* ===== .acct rows: google-picker (login), new-tree "start from" radios (trees), share "add people" (trees+editor) ===== */
+.acct{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border:1px solid var(--edge);border-radius:10px;background:var(--canvas);color:var(--ink);text-align:left}
+.acct:hover{border-color:var(--edge-2);background:var(--panel-2)}
+.acct small{display:block;color:var(--muted)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
