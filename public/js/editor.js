@@ -388,7 +388,12 @@ const Editor=(function(){
       }).join("");
       return `<div class="grp"><div class="lbl">${o?`With ${esc(dn(byId[o]))}`:"Co-parent not recorded"}</div><ul class="kids-list">${kids}</ul></div>`;
     }).join("");
-    const ancestors=ancestorGroups(p.id).map((g,i)=>`<div class="grp"><div class="lbl">${ancestorLabel(i)}</div><div class="kids">${g.map(plink).join("")}</div></div>`).join("");
+    const ANCESTOR_SHOWN=3;
+    const ancestors=ancestorGroups(p.id).map((g,i)=>{
+      const shown=g.slice(0,ANCESTOR_SHOWN).map(plink).join(""), hidden=g.slice(ANCESTOR_SHOWN);
+      const more=hidden.length?`<span class="more-kids" style="display:none">${hidden.map(plink).join("")}</span><button type="button" class="btn btn-quiet btn-sm" data-showmore>Show ${hidden.length} more</button>`:"";
+      return `<div class="grp"><div class="lbl">${ancestorLabel(i)}</div><div class="kids">${shown}${more}</div></div>`;
+    }).join("");
     const sib=new Set(); parents.forEach(par=>children(par).forEach(c=>{ if(c.id!==p.id) sib.add(c.id); }));
     const removeBtn=(p.img&&p.img!==A)?'<button type="button" class="btn btn-quiet btn-sm" id="dPhotoDel">Remove</button>':"";
     const photoActions=ro()?"":`<div class="d-flex flex-wrap gap-2 justify-content-center mt-3"><label class="btn btn-quiet btn-sm mb-0" for="dPhoto">${p.img&&p.img!==A?"Change photo":"Upload photo"}</label>${removeBtn}</div>`;
@@ -439,6 +444,7 @@ const Editor=(function(){
     paintDetail(); detModal.show();
   }
   $("#detBody").on("click","[data-goto]",function(){ const id=$(this).data("goto"); openDetails(id); select(id,true); });
+  $("#detBody").on("click","[data-showmore]",function(){ $(this).prev(".more-kids").css("display","contents"); $(this).remove(); });
   $("#detLocate").on("click",()=>{ detModal.hide(); select(detId,true); });
   $("#detBody").on("click","[data-reorder]",async function(){
     const $btn=$(this); if($btn.prop("disabled")) return;
