@@ -346,7 +346,7 @@ const Editor=(function(){
     summaryModal.show();
   }
   $("#eMenu").on("click","#eSummaryBtn",openSummary);
-  const plink=id=>`<button type="button" class="plink" data-goto="${id}"><span class="sw-dot" style="background:var(--${byId[id].gender})"></span>${esc(dn(byId[id]))}</button>`;
+  const plink=id=>{ const q=byId[id]; return `<button type="button" class="plink" data-goto="${id}"><span class="mini-av ${q.gender}">${avatar(q,24)}</span>${esc(dn(q))}</button>`; };
   function age(p){ if(!p.birthDate) return ""; const b=new Date(p.birthDate), d=p.status==="deceased"&&p.deathDate?new Date(p.deathDate):new Date(); let a=d.getFullYear()-b.getFullYear(); if(d<new Date(d.getFullYear(),b.getMonth(),b.getDate())) a--; return p.status==="deceased"?(p.deathDate?`died aged ${a}`:""):`age ${a}`; }
   /* Ancestors of id, nearest generation first: [[parents...],[grandparents...],[great-grandparents...],...] */
   function ancestorGroups(id){
