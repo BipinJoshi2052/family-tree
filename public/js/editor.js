@@ -167,8 +167,11 @@ const Editor=(function(){
     : `<svg width="${size}" height="${size}" viewBox="0 0 40 40" fill="${dashed?"none":"currentColor"}" stroke="${dashed?"currentColor":"none"}" stroke-width="2"><path d="M8 40c0-8 5-13 12-13s12 5 12 13"/><circle cx="20" cy="16" r="7"/></svg>`;
   function avatar(p,size){
     const sil=`<div class="sil">${SIL(p.gender,Math.round(size*.82))}</div>`;
-    if(typeof p.img==="string"&&p.img.startsWith("images/")) return sil+`<img src="${esc(imgUrl(p.img,p.updatedAt))}" alt="" onerror="this.remove()">`;
-    const src=p.img===A?portrait(p):p.img; return src? sil+`<img src="${esc(src)}" alt="" onerror="this.remove()">` : sil; }
+    /* width/height are set as real HTML attributes (not just CSS) so the image can never render at
+       its natural size - a 600x600 uploaded photo - even for a split second before CSS applies, or
+       in a context where the .mini-av/.d-photo/.av CSS doesn't reach it for some reason. */
+    if(typeof p.img==="string"&&p.img.startsWith("images/")) return sil+`<img width="${size}" height="${size}" src="${esc(imgUrl(p.img,p.updatedAt))}" alt="" onerror="this.remove()">`;
+    const src=p.img===A?portrait(p):p.img; return src? sil+`<img width="${size}" height="${size}" src="${esc(src)}" alt="" onerror="this.remove()">` : sil; }
   const dateLine=p=> p.status==="deceased"? `${p.birthDate?yr(p.birthDate):"?"} – ${p.deathDate?yr(p.deathDate):"?"}` : (p.birthDate?`b. ${fmt(p.birthDate)}`:"Birth date unknown");
 
   /* pan/zoom */
@@ -333,19 +336,28 @@ const Editor=(function(){
     });
     return blood;
   }
-  function openSummary(){
-    const total=people.length, male=people.filter(p=>p.gender==="male").length, female=total-male,
-      deceased=people.filter(p=>p.status==="deceased").length, living=total-deceased,
-      abroad=people.filter(isAbroad).length, inCountry=total-abroad;
-    const bloodIds=computeBloodMemberIds(), bloodPeople=people.filter(p=>bloodIds.has(p.id)),
-      bloodTotal=bloodPeople.length, bloodMale=bloodPeople.filter(p=>p.gender==="male").length, bloodFemale=bloodTotal-bloodMale;
+  function openSummary(gen){
+    const scope=gen?people.filter(p=>p._gen===gen):people;
+    const total=scope.length, male=scope.filter(p=>p.gender==="male").length, female=total-male;
+    const bloodIds=computeBloodMemberIds(), bloodScope=scope.filter(p=>bloodIds.has(p.id)),
+      bloodTotal=bloodScope.length, bloodMale=bloodScope.filter(p=>p.gender==="male").length, bloodFemale=bloodTotal-bloodMale;
     const tile=(label,val)=>`<div class="sum-tile"><b>${val}</b><span>${esc(label)}</span></div>`;
-    $("#sumGrid").html([tile("Total members",total),tile("Male",male),tile("Female",female),
-      tile("Deceased",deceased),tile("Living",living),tile("In country",inCountry),tile("Abroad",abroad),
-      tile("Blood members",bloodTotal),tile("Blood males",bloodMale),tile("Blood females",bloodFemale)].join(""));
+    if(gen){
+      $("#sumTitle").text(`Generation ${gen}`);
+      $("#sumGrid").html([tile("Total members",total),tile("Male",male),tile("Female",female),
+        tile("Blood members",bloodTotal),tile("Blood males",bloodMale),tile("Blood females",bloodFemale)].join(""));
+    } else {
+      const deceased=scope.filter(p=>p.status==="deceased").length, living=total-deceased,
+        abroad=scope.filter(isAbroad).length, inCountry=total-abroad;
+      $("#sumTitle").text("Tree summary");
+      $("#sumGrid").html([tile("Total members",total),tile("Male",male),tile("Female",female),
+        tile("Deceased",deceased),tile("Living",living),tile("In country",inCountry),tile("Abroad",abroad),
+        tile("Blood members",bloodTotal),tile("Blood males",bloodMale),tile("Blood females",bloodFemale)].join(""));
+    }
     summaryModal.show();
   }
-  $("#eMenu").on("click","#eSummaryBtn",openSummary);
+  $("#eMenu").on("click","#eSummaryBtn",()=>openSummary());
+  $("#nodes").on("click",".gen-tag",function(){ openSummary(+$(this).data("gen")); });
   const plink=id=>{ const q=byId[id]; return `<button type="button" class="plink" data-goto="${id}"><span class="mini-av ${q.gender}">${avatar(q,24)}</span>${esc(dn(q))}</button>`; };
   function age(p){ if(!p.birthDate) return ""; const b=new Date(p.birthDate), d=p.status==="deceased"&&p.deathDate?new Date(p.deathDate):new Date(); let a=d.getFullYear()-b.getFullYear(); if(d<new Date(d.getFullYear(),b.getMonth(),b.getDate())) a--; return p.status==="deceased"?(p.deathDate?`died aged ${a}`:""):`age ${a}`; }
   /* Ancestors of id, nearest generation first: [[parents...],[grandparents...],[great-grandparents...],...] */
@@ -523,7 +535,8 @@ const Editor=(function(){
     unions.forEach(u=>{ s+=`<circle class="hub" data-u="${u.key}" cx="${u.x}" cy="${u.y}" r="${u.partners.length===2?5:3.5}"/>`; });
     $("#links").html(s);
     let h="";
-    for(let g=1;g<=BOUNDS.G;g++) h+=`<div class="gen-tag" style="left:${PAD-150}px;top:${PAD+(g-1)*ROWH+CH/2-8}px">Gen ${g}</div>`;
+    for(let g=1;g<=BOUNDS.G;g++){ const cnt=people.filter(p=>p._gen===g).length;
+      h+=`<button type="button" class="gen-tag" data-gen="${g}" style="left:${PAD-150}px;top:${PAD+(g-1)*ROWH+CH/2-8}px">Gen ${g} · ${cnt}</button>`; }
     people.forEach(p=>{ const q=pos[p.id];
       const tags=(p.status==="deceased"?'<span>Deceased</span>':"")+(isAbroad(p)?'<span>Abroad</span>':"");
       h+=`<div class="node ${p.gender}${p.status==="deceased"?" deceased":""}" data-id="${p.id}" style="left:${q.x}px;top:${q.y}px" tabindex="0" role="button" aria-label="${esc(dn(p))}">

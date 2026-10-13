@@ -34,7 +34,8 @@ circle.hub{fill:var(--line);transition:opacity .25s,fill .25s}
 #world.dim path.edge:not(.lit),#world.dim circle.hub:not(.lit){opacity:.25}
 #world.dim path.edge.lit{stroke:var(--line-hi);stroke-width:2}
 #world.dim circle.hub.lit{fill:var(--line-hi)}
-.gen-tag{position:absolute;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#4d5560;white-space:nowrap;pointer-events:none}
+.gen-tag{position:absolute;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#4d5560;white-space:nowrap;background:none;border:0;padding:2px 4px;margin:-2px -4px;border-radius:4px;cursor:pointer}
+.gen-tag:hover{color:var(--ink);background:var(--panel-2)}
 .node{position:absolute;width:230px;height:96px;border-radius:10px;color:#fff;cursor:pointer;--c:var(--male);--cd:var(--male-deep);background:var(--c);box-shadow:0 2px 0 var(--cd),0 10px 24px rgba(0,0,0,.35);transition:opacity .25s,box-shadow .2s,transform .2s;display:flex}
 .node.female{--c:var(--female);--cd:var(--female-deep)}
 .node:hover{transform:translateY(-2px)}
