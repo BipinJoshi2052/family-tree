@@ -19,7 +19,8 @@ const Editor=(function(){
     const get=(a,b)=>{ const k=key(a,b); if(!map.has(k)) map.set(k,{key:k,partners:b?[a,b].sort():[a],children:[]}); return map.get(k); };
     people.forEach(p=>p.pids.forEach(q=>{ if(byId[q]) get(p.id,q); }));
     parentUnion={};
-    people.slice().sort((a,b)=>(a.birthDate||"9").localeCompare(b.birthDate||"9")).forEach(c=>{ const ps=[c.fid,c.mid].filter(x=>x&&byId[x]); if(!ps.length) return; const u=get(ps[0],ps[1]); u.children.push(c.id); parentUnion[c.id]=u; });
+    const sortKey=p=>(p.sortOrder==null?Infinity:p.sortOrder);
+    people.slice().sort((a,b)=>sortKey(a)-sortKey(b)||(a.birthDate||"9").localeCompare(b.birthDate||"9")).forEach(c=>{ const ps=[c.fid,c.mid].filter(x=>x&&byId[x]); if(!ps.length) return; const u=get(ps[0],ps[1]); u.children.push(c.id); parentUnion[c.id]=u; });
     unions=[...map.values()]; people.forEach(p=>p._u=[]);
     unions.forEach(u=>u.partners.forEach(pid=>byId[pid]._u.push(u)));
     people.forEach(p=>p._u.sort((a,b)=>{ const oa=p.pids.indexOf(other(a,p.id)), ob=p.pids.indexOf(other(b,p.id)); return (oa<0?99:oa)-(ob<0?99:ob); }));
@@ -56,11 +57,12 @@ const Editor=(function(){
         const floating=id=>!parentUnion[id]&&byId[id]._gen>1;
         const ks=c.map(m=>parentUnion[m]).filter(u=>u&&u.x!=null&&!u.partners.every(floating)).map(u=>u.x);
         const bd=c.map(m=>byId[m].birthDate||"9").sort()[0];
+        const so=Math.min(...c.map(m=>byId[m].sortOrder==null?Infinity:byId[m].sortOrder));
         let key=ks.length?ks.reduce((a,b)=>a+b,0)/ks.length:null;
         if(key==null){ const kids=[]; c.forEach(m=>byId[m]._u.forEach(u=>u.children.forEach(ch=>{ if(prev[ch]!=null) kids.push(prev[ch]); }))); if(kids.length) key=kids.reduce((a,b)=>a+b,0)/kids.length; }
-        cls.push({m:c,key,i:cls.length,bd});
+        cls.push({m:c,key,i:cls.length,bd,so});
       });
-      cls.sort((a,b)=>(a.key==null||b.key==null)?(a.key==null&&b.key==null?a.i-b.i:(a.key==null?(g===1?-1:1):(g===1?1:-1))):(a.key-b.key||a.bd.localeCompare(b.bd)));
+      cls.sort((a,b)=>(a.key==null||b.key==null)?(a.key==null&&b.key==null?a.i-b.i:(a.key==null?(g===1?-1:1):(g===1?1:-1))):(a.key-b.key||a.so-b.so||a.bd.localeCompare(b.bd)));
       let cursor=null, prevKey=null;
       cls.forEach(cl=>{
         const order=arrange(cl.m), w=order.length*CW+(order.length-1)*SPOUSE_GAP; let left;
@@ -363,7 +365,17 @@ const Editor=(function(){
   }
   function detReadHtml(p){
     const parents=[p.fid,p.mid].filter(x=>x&&byId[x]), sps=p.pids.filter(x=>byId[x]);
-    const groups=p._u.filter(u=>u.children.length).map(u=>{ const o=other(u,p.id); return `<div class="grp"><div class="lbl">${o?`With ${esc(dn(byId[o]))}`:"Co-parent not recorded"}</div><div class="kids">${u.children.map(c=>`<div>${plink(c)}<small>${byId[c].birthDate?yr(byId[c].birthDate):""}</small></div>`).join("")}</div></div>`; }).join("");
+    const groups=p._u.filter(u=>u.children.length).map(u=>{
+      const o=other(u,p.id), last=u.children.length-1;
+      const kids=u.children.map((c,i)=>{
+        const btns=ro()?"":`<span class="kid-reorder">
+          <button type="button" class="ibtn xs" data-reorder="up" data-u="${esc(u.key)}" data-id="${c}"${i===0?" disabled":""} aria-label="Move ${esc(dn(byId[c]))} up">${I.chevUp}</button>
+          <button type="button" class="ibtn xs" data-reorder="down" data-u="${esc(u.key)}" data-id="${c}"${i===last?" disabled":""} aria-label="Move ${esc(dn(byId[c]))} down">${I.chevDown}</button>
+        </span>`;
+        return `<li class="kid-row">${btns}${plink(c)}<small>${byId[c].birthDate?yr(byId[c].birthDate):""}</small></li>`;
+      }).join("");
+      return `<div class="grp"><div class="lbl">${o?`With ${esc(dn(byId[o]))}`:"Co-parent not recorded"}</div><ul class="kids-list">${kids}</ul></div>`;
+    }).join("");
     const ancestors=ancestorGroups(p.id).map((g,i)=>`<div class="grp"><div class="lbl">${ancestorLabel(i)}</div><div class="kids">${g.map(plink).join("")}</div></div>`).join("");
     const sib=new Set(); parents.forEach(par=>children(par).forEach(c=>{ if(c.id!==p.id) sib.add(c.id); }));
     const removeBtn=(p.img&&p.img!==A)?'<button type="button" class="btn btn-quiet btn-sm" id="dPhotoDel">Remove</button>':"";
@@ -413,6 +425,20 @@ const Editor=(function(){
   }
   $("#detBody").on("click","[data-goto]",function(){ const id=$(this).data("goto"); openDetails(id); select(id,true); });
   $("#detLocate").on("click",()=>{ detModal.hide(); select(detId,true); });
+  $("#detBody").on("click","[data-reorder]",async function(){
+    const $btn=$(this); if($btn.prop("disabled")) return;
+    const uKey=$btn.data("u"), id=$btn.data("id"), dir=$btn.data("reorder");
+    const u=unions.find(x=>x.key===String(uKey)); if(!u) return;
+    const kids=u.children.slice(), idx=kids.indexOf(id); if(idx<0) return;
+    const swapIdx=dir==="up"?idx-1:idx+1; if(swapIdx<0||swapIdx>=kids.length) return;
+    [kids[idx],kids[swapIdx]]=[kids[swapIdx],kids[idx]];
+    $btn.closest(".kids-list").find("[data-reorder]").prop("disabled",true);
+    try{
+      await Promise.all(kids.map((cid,i)=>Api.people.update(cid,{sort_order:i})));
+      kids.forEach((cid,i)=>{ byId[cid].sortOrder=i; });
+      render(); paintDetail();
+    }catch(e){ toast("Couldn't save that order.","danger"); paintDetail(); }
+  });
   $("#dPhoto").on("change",async function(){ const f=this.files[0]; this.value=""; if(!f||!detId||!tree) return; const p=byId[detId];
     try{ const r=await cropPhoto(f); const res=await Api.people.uploadPhoto(p.id,r.blob); p.img=res.img; p.updatedAt=Date.now();
       render(); paintDetail();

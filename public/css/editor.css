@@ -99,6 +99,12 @@ path.gedge{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 5;a
 .grp .lbl{font-size:.78rem;color:var(--muted);margin-bottom:6px}
 .grp .kids{display:flex;flex-wrap:wrap;gap:6px 16px}
 .grp .kids small{font-family:var(--f-mono);color:var(--muted);margin-left:5px}
+.kids-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.kid-row{display:flex;align-items:center;gap:8px;padding:4px 0}
+.kid-row small{font-family:var(--f-mono);color:var(--muted);margin-left:auto}
+.kid-reorder{display:flex;gap:2px;flex:none}
+.ibtn.xs{width:22px;height:22px;border-radius:5px}
+.ibtn.xs:disabled{opacity:.3;pointer-events:none}
 .bio{line-height:1.6;max-width:64ch;margin:0;color:#d7dce1}
 @media (max-width:720px){
   .etop{padding:8px 16px;gap:8px}

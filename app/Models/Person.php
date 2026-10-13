@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'tree_id', 'name', 'name_ne', 'gender', 'birth_date', 'status', 'death_date',
-    'birthplace', 'phone', 'location', 'residency', 'bio', 'img', 'pids', 'father_id', 'mother_id',
+    'birthplace', 'phone', 'location', 'residency', 'bio', 'img', 'pids', 'sort_order', 'father_id', 'mother_id',
 ])]
 class Person extends Model
 {

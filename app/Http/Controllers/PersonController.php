@@ -118,6 +118,7 @@ class PersonController extends Controller
             'location' => ['sometimes', 'nullable', 'string', 'max:80'],
             'residency' => ['sometimes', 'in:local,abroad'],
             'bio' => ['sometimes', 'nullable', 'string', 'max:600'],
+            'sort_order' => ['sometimes', 'nullable', 'integer', 'min:0'],
         ]);
 
         if (($data['status'] ?? $person->status) !== 'deceased') {
