@@ -31,7 +31,8 @@ const I={
   filter:sv('<path d="M3 4h18l-7 8v6l-4 2v-8z"/>',18),
   chevUp:sv('<path d="M5 15l7-7 7 7"/>',14),
   chevDown:sv('<path d="M5 9l7 7 7-7"/>',14),
-  share:sv('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-3.9M8.6 13.5l6.8 3.9"/>')
+  share:sv('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-3.9M8.6 13.5l6.8 3.9"/>'),
+  branch:sv('<circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8.3 10.8c2 1.3 3.5 1.3 5.4 0l2-1.5"/>')
 };
 // inject icons into static markup placeholders
 document.querySelectorAll('[data-eye]').forEach(b=>b.innerHTML=I.eye);

@@ -393,7 +393,10 @@ const Editor=(function(){
     const removeBtn=(p.img&&p.img!==A)?'<button type="button" class="btn btn-quiet btn-sm" id="dPhotoDel">Remove</button>':"";
     const photoActions=ro()?"":`<div class="d-flex flex-wrap gap-2 justify-content-center mt-3"><label class="btn btn-quiet btn-sm mb-0" for="dPhoto">${p.img&&p.img!==A?"Change photo":"Upload photo"}</label>${removeBtn}</div>`;
     const editBtn=ro()?"":`<button type="button" class="ibtn" id="detEditBtn" aria-label="Edit ${esc(p.name)}'s details" title="Edit details">${I.edit}</button>`;
-    const removeSec=ro()?"":`<div class="d-sec"><button type="button" class="btn btn-quiet btn-sm" id="detRemoveBtn" style="color:#ff8a80">${I.trash}<span class="ms-1">Remove ${esc(first(p))} from this tree</span></button></div>`;
+    const removeSec=ro()?"":`<div class="d-sec d-flex flex-wrap gap-2">
+      <button type="button" class="btn btn-quiet btn-sm" id="detBranchBtn">${I.branch}<span class="ms-1">Branch ${esc(first(p))}'s line into a new tree</span></button>
+      <button type="button" class="btn btn-quiet btn-sm" id="detRemoveBtn" style="color:#ff8a80">${I.trash}<span class="ms-1">Remove ${esc(first(p))} from this tree</span></button>
+    </div>`;
     return `<div class="d-hero" style="--c:var(--${p.gender});--cd:var(--${p.gender}-deep)"><div><div class="d-photo">${avatar(p,140)}</div>${photoActions}</div>
       <div style="min-width:0"><div class="d-flex align-items-center gap-2 flex-wrap"><h2 class="d-name" id="detName" style="margin-bottom:0">${esc(dn(p))}</h2>${editBtn}</div>${altName(p)?`<div class="alt-name">${esc(altName(p))}</div>`:""}<div class="d-sub">${dateLine(p)}${age(p)?` · ${age(p)}`:""}</div>
       <dl class="facts">${neOn()?`<dt>English name</dt><dd>${esc(p.name)}</dd><dt>नेपाली नाम</dt><dd>${p.nameNe?`<span lang="ne">${esc(p.nameNe)}</span>`:'<span class="muted">Not added · English name is shown</span>'}</dd>`:""}<dt>Gender</dt><dd><span class="sw-dot" style="background:var(--${p.gender})"></span>${p.gender==="male"?"Male":"Female"}</dd>
@@ -460,6 +463,13 @@ const Editor=(function(){
     try{ await Api.people.removePhoto(p.id); p.img=""; p.updatedAt=Date.now(); render(); paintDetail(); toast(`Removed ${p.name}'s photo.`); }
     catch(e){ toast("Couldn't remove that photo.","danger"); } });
   $("#detBody").on("click","#detEditBtn",()=>paintDetailEdit());
+  $("#detBody").on("click","#detBranchBtn",function(){
+    const p=byId[detId];
+    branchCtx=p.id;
+    $("#brDesc").text(`Creates a new, separate tree with ${dn(p)}'s full line - every ancestor and their own descendants. The two trees won't stay linked.`);
+    $("#brName").val(`${dn(p)}'s branch`).removeClass("is-invalid");
+    detModal.hide(); branchModal.show();
+  });
   $("#detBody").on("click","#detRemoveBtn",function(){
     const p=byId[detId]; ctxId=p.id; ctxKind="person";
     $("#cfTitle").text("Remove this person?"); $("#cfGo").text("Remove");
@@ -617,6 +627,21 @@ const Editor=(function(){
   $("#shStop").on("click",async()=>{
     try{ await Api.trees.unshare(tree.id); toast("Sharing turned off.","danger"); shareModal.hide(); }
     catch(e){ toast("Couldn't turn off sharing.","danger"); }
+  });
+  const branchModal=$("#branchModal").length?new bootstrap.Modal("#branchModal"):null;
+  let branchCtx=null;
+  $("#branchForm").on("submit",async function(e){
+    e.preventDefault();
+    const name=$("#brName").val().trim();
+    $("#brName").toggleClass("is-invalid",!name); if(!name) return;
+    const $btn=$(this).find('button[type="submit"]'); $btn.prop("disabled",true);
+    try{
+      const newTree=await Api.people.branch(branchCtx,name);
+      branchModal.hide();
+      toast(`Created ${name}.`,"ok");
+      openTree(newTree.slug,true);
+    }catch(xhr){ toast(apiErr(xhr),"danger"); }
+    finally{ $btn.prop("disabled",false); }
   });
 
   return {

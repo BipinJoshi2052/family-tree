@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/trees/{tree}/people', [PersonController::class, 'store'])->name('people.store');
         Route::patch('/people/{person}', [PersonController::class, 'update'])->name('people.update');
         Route::delete('/people/{person}', [PersonController::class, 'destroy'])->name('people.destroy');
+        Route::post('/people/{person}/branch', [PersonController::class, 'branch'])->name('people.branch');
         Route::post('/people/{person}/photo', [PersonPhotoController::class, 'store'])->name('people.photo.store');
         Route::delete('/people/{person}/photo', [PersonPhotoController::class, 'destroy'])->name('people.photo.destroy');
 

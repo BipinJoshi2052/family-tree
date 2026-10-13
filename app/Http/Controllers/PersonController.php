@@ -6,6 +6,7 @@ use App\Models\Person;
 use App\Models\Tree;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PersonController extends Controller
@@ -99,6 +100,118 @@ class PersonController extends Controller
         $person->tree->touch();
 
         return response()->json(['ok' => true]);
+    }
+
+    /**
+     * Spin off this person's branch - every ancestor (both parents, every generation up) and
+     * their own direct line of descendants (with each generation's spouses, so no co-parent is
+     * left dangling) - into a brand new, independent tree. Siblings, cousins, and anyone else off
+     * that direct line are left out entirely; nothing links the two trees together afterwards.
+     */
+    public function branch(Request $request, Person $person): JsonResponse
+    {
+        abort_unless($person->tree->user_id === $request->user()->id, 404);
+
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:60'],
+        ]);
+
+        $sourceTree = $person->tree;
+        $all = $sourceTree->people()->get()->keyBy('id');
+
+        $included = $this->collectBranch($person, $all);
+
+        $tree = DB::transaction(function () use ($request, $data, $sourceTree, $all, $included) {
+            $tree = $request->user()->trees()->create([
+                'name' => $data['name'],
+                'default_lang' => $sourceTree->default_lang,
+                'layout' => $sourceTree->layout,
+            ]);
+
+            $idMap = [];
+            foreach ($included as $id) {
+                $source = $all[$id];
+                $img = $source->img && ! str_starts_with($source->img, 'images/') ? $source->img : null;
+
+                $new = $tree->people()->create([
+                    'name' => $source->name,
+                    'name_ne' => $source->name_ne,
+                    'gender' => $source->gender,
+                    'birth_date' => $source->birth_date,
+                    'birthplace' => $source->birthplace,
+                    'status' => $source->status,
+                    'death_date' => $source->death_date,
+                    'phone' => $source->phone,
+                    'location' => $source->location,
+                    'residency' => $source->residency,
+                    'bio' => $source->bio,
+                    'img' => $img,
+                    'sort_order' => $source->sort_order,
+                    'pids' => [],
+                ]);
+
+                $idMap[$id] = $new->id;
+            }
+
+            foreach ($included as $id) {
+                $source = $all[$id];
+                $new = Person::find($idMap[$id]);
+                $new->father_id = $source->father_id && isset($idMap[$source->father_id]) ? $idMap[$source->father_id] : null;
+                $new->mother_id = $source->mother_id && isset($idMap[$source->mother_id]) ? $idMap[$source->mother_id] : null;
+                $new->pids = collect($source->pids ?? [])
+                    ->map(fn ($pid) => $idMap[$pid] ?? null)
+                    ->filter()
+                    ->values()
+                    ->all();
+                $new->save();
+            }
+
+            return $tree;
+        });
+
+        return response()->json($tree->loadCount('people'), 201);
+    }
+
+    /**
+     * @param  Collection<int, Person>  $all
+     * @return array<int, int>
+     */
+    private function collectBranch(Person $person, Collection $all): array
+    {
+        $included = [];
+
+        $ancestorQueue = [$person->id];
+        while ($ancestorQueue) {
+            $cur = $all[array_pop($ancestorQueue)];
+            foreach ([$cur->father_id, $cur->mother_id] as $parentId) {
+                if ($parentId && ! isset($included[$parentId]) && isset($all[$parentId])) {
+                    $included[$parentId] = true;
+                    $ancestorQueue[] = $parentId;
+                }
+            }
+        }
+
+        $included[$person->id] = true;
+        $descendantQueue = [$person->id];
+        while ($descendantQueue) {
+            $curId = array_pop($descendantQueue);
+            $cur = $all[$curId];
+
+            foreach ($cur->pids ?? [] as $spouseId) {
+                if (! isset($included[$spouseId]) && isset($all[$spouseId])) {
+                    $included[$spouseId] = true;
+                }
+            }
+
+            foreach ($all as $candidate) {
+                if (($candidate->father_id === $curId || $candidate->mother_id === $curId) && ! isset($included[$candidate->id])) {
+                    $included[$candidate->id] = true;
+                    $descendantQueue[] = $candidate->id;
+                }
+            }
+        }
+
+        return array_keys($included);
     }
 
     /**

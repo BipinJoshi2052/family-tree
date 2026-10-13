@@ -255,6 +255,20 @@
   </div>
 </div>
 
+<div class="modal fade" id="branchModal" tabindex="-1" aria-labelledby="brTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <form class="modal-content" id="branchForm" novalidate>
+      <div class="modal-header"><h5 class="modal-title" id="brTitle">Branch into a new tree</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div>
+      <div class="modal-body">
+        <p class="muted" id="brDesc"></p>
+        <label class="form-label" for="brName">New tree name</label><input class="form-control" id="brName" required maxlength="60">
+        <div class="invalid-feedback">Give the new tree a name.</div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-quiet" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-go">Create</button></div>
+    </form>
+  </div>
+</div>
+
 <script>
 window.INITIAL_VIEW = @json($initialView);
 window.INITIAL_TREE_SLUG = @json($treeSlug);

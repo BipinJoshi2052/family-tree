@@ -47,6 +47,7 @@ const Api = {
     add: (treeId, data) => $.post(`/api/trees/${treeId}/people`, data),
     update: (id, data) => $.ajax({ url: `/api/people/${id}`, method: "PATCH", data }),
     remove: (id) => $.ajax({ url: `/api/people/${id}`, method: "DELETE" }),
+    branch: (id, name) => $.post(`/api/people/${id}/branch`, { name }),
     uploadPhoto: (id, blob) => {
       const fd = new FormData();
       fd.append("photo", blob, "photo.jpg");
