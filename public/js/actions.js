@@ -1,14 +1,27 @@
 "use strict";
-/* Shared between trees.html-equivalent and editor.html-equivalent pages: the global [data-action]
-   click dispatcher and the New-tree/Rename/Confirm modals. Both pages carry an identical copy of
-   the Rename and Confirm modal markup, so this one script wires up whichever copy is present.
-   Branches that would repaint the trees list (nav/paintTrees/paintShell/...) are guarded with
-   typeof checks since those functions only exist on the dashboard page - on the editor page
-   they're simply skipped, since the server already has the update and the dashboard will repaint
-   fresh from it next time it loads. */
+/* Shared between the dashboard and editor screens (see app.blade.php / core.js's SCREEN): the
+   global [data-action] click dispatcher and the New-tree/Rename/Confirm modals, which exist once
+   in the DOM and are used from whichever screen is currently active. Branches that would repaint
+   the trees list are guarded with SCREEN==="app" checks (the inverse, SCREEN==="editor", picks the
+   Editor-object branch) rather than feature-detection, since both trees.js and editor.js are
+   always loaded together now. */
 
-function openTree(id,fresh){ location.href="/editor/"+id+(fresh?"?fresh=1":""); }
-function closeEditor(){ location.href="/trees"; }
+/* Navigates between the dashboard and editor screens without a full page reload: fetch the
+   destination's data (showing a loader meanwhile), then swap screens and update the URL via
+   history.pushState so the address bar and back/forward buttons stay correct. */
+function openTree(slug,fresh){
+  history.pushState({view:"editor",slug,fresh:!!fresh},"","/editor/"+slug+(fresh?"?fresh=1":""));
+  bootEditor(slug,!!fresh);
+}
+function closeEditor(){
+  history.pushState({view:"app"},"","/trees");
+  bootApp();
+}
+window.addEventListener("popstate",e=>{
+  const st=e.state;
+  if(st&&st.view==="editor") bootEditor(st.slug,!!st.fresh);
+  else bootApp();
+});
 
 const ntModal=$("#newTreeModal").length?new bootstrap.Modal("#newTreeModal"):null;
 const rnModal=new bootstrap.Modal("#renameModal"), cfModal=new bootstrap.Modal("#confirmModal");
@@ -21,13 +34,13 @@ $(document).on("click","[data-action]",function(e){
     "new-tree":()=>{ $("#newTreeForm")[0].reset(); $("#newTreeForm").removeClass("was-validated"); syncNt(); ntModal.show(); },
     star:()=>{
       const $btn=$(this), willStar=!$btn.hasClass("on");
-      Api.trees.update(id,{starred:willStar?1:0}).done(()=>{ if(typeof paintTrees==="function"){ const t=Trees.find(x=>x.id===id); if(t) t.starred=willStar; paintTrees(); } });
+      Api.trees.update(id,{starred:willStar?1:0}).done(()=>{ if(SCREEN==="app"){ const t=Trees.find(x=>x.id===id); if(t) t.starred=willStar; paintTrees(); } });
     },
-    open:()=>openTree(id),
-    rename:()=>{ ctxId=id; const t=typeof Trees!=="undefined"?Trees.find(x=>x.id===id):null; $("#rnName").val(t?t.name:(typeof Editor!=="undefined"?Editor.treeName():"")).removeClass("is-invalid"); rnModal.show(); },
+    open:()=>{ const t=Trees.find(x=>x.id===id); if(t) openTree(t.slug,false); },
+    rename:()=>{ ctxId=id; const t=SCREEN==="app"?Trees.find(x=>x.id===id):null; $("#rnName").val(t?t.name:(SCREEN==="editor"?Editor.treeName():"")).removeClass("is-invalid"); rnModal.show(); },
     import:()=>$("#importFiles").trigger("click"),
-    delete:()=>{ const t=typeof Trees!=="undefined"?Trees.find(x=>x.id===id):null; ctxId=id; ctxKind="tree";
-      const name=t?t.name:(typeof Editor!=="undefined"?Editor.treeName():"This tree"), count=t?t.people_count:(typeof Editor!=="undefined"?Editor.peopleCount():0);
+    delete:()=>{ const t=SCREEN==="app"?Trees.find(x=>x.id===id):null; ctxId=id; ctxKind="tree";
+      const name=t?t.name:(SCREEN==="editor"?Editor.treeName():"This tree"), count=t?t.people_count:(SCREEN==="editor"?Editor.peopleCount():0);
       $("#cfTitle").text("Delete this tree?"); $("#cfGo").text("Delete tree");
       $("#cfBody").html(`<p class="mb-0"><b>${esc(name)}</b> and its ${count} people will be permanently removed.</p>`); cfModal.show(); },
   })[a]?.call(this);
@@ -52,7 +65,7 @@ $("#newTreeForm").on("submit",function(e){
   Api.trees.create(name,defaultLang,{name:personName,name_ne:personNameNe||null,gender:personGender}).done(tree=>{
     ntModal.hide();
     toast(`Created ${name}.`,"ok");
-    openTree(tree.id,true);
+    openTree(tree.slug,true);
   }).fail(xhr=>toast(apiErr(xhr),"danger")).always(()=>$btn.prop("disabled",false));
 });
 /* rename (shared) */
@@ -60,8 +73,8 @@ $("#renameModal").on("shown.bs.modal",()=>$("#rnName").trigger("select"));
 $("#renameForm").on("submit",function(e){ e.preventDefault(); const n=$("#rnName").val().trim(); $("#rnName").toggleClass("is-invalid",!n); if(!n) return;
   Api.trees.update(ctxId,{name:n}).done(()=>{
     rnModal.hide();
-    if(typeof Editor!=="undefined") Editor.renamed(n);
-    else if(typeof nav==="function"){ const t=Trees.find(x=>x.id===ctxId); if(t) t.name=n; nav(curView); }
+    if(SCREEN==="editor") Editor.renamed(n);
+    else { const t=Trees.find(x=>x.id===ctxId); if(t) t.name=n; nav(curView); }
     toast("Renamed.","ok");
   }).fail(xhr=>toast(apiErr(xhr),"danger"));
 });
@@ -71,14 +84,14 @@ $("#cfGo").on("click",()=>{
     Api.people.remove(ctxId).done(()=>{
       cfModal.hide();
       toast("Removed.","danger");
-      if(typeof Editor!=="undefined") Editor.personRemoved(ctxId);
+      Editor.personRemoved(ctxId);
     }).fail(xhr=>toast(apiErr(xhr),"danger"));
     return;
   }
   Api.trees.remove(ctxId).done(()=>{
     cfModal.hide();
     toast("Deleted.","danger");
-    if(typeof Editor!=="undefined") location.href="/trees";
-    else if(typeof nav==="function"){ Trees=Trees.filter(x=>x.id!==ctxId); nav(curView); }
+    if(SCREEN==="editor") closeEditor();
+    else { Trees=Trees.filter(x=>x.id!==ctxId); nav(curView); }
   }).fail(xhr=>toast(apiErr(xhr),"danger"));
 });

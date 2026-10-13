@@ -34,6 +34,18 @@ form[hidden],div[hidden].row{display:none!important}
 .screen{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--bg);padding-top:env(safe-area-inset-top,0px);animation:scrIn .35s ease-out}
 @keyframes scrIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+/* app.blade.php's two screens (dashboard/editor) coexist in one DOM; only one is shown at a time,
+   toggled by core.js's showScreen() - unlike welcome/splash, which stay simple always-flex .screen
+   siblings since splash just removes itself. */
+.screen.app-screen{display:none}
+.screen.app-screen.on{display:flex}
+
+/* ===== loading spinner shown in a content area while a screen's data is being fetched ===== */
+.content-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:20}
+.content-loader[hidden]{display:none}
+.spinner{width:30px;height:30px;border:3px solid var(--edge);border-top-color:var(--male);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 /* ===== shared bits ===== */
 .wordmark{font-weight:900;letter-spacing:-.01em}
 .btn-go{background:var(--male);border:0;color:#fff;font-weight:700;border-radius:8px;padding:9px 18px}

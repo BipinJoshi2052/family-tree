@@ -23,6 +23,17 @@ class TreeController extends Controller
     }
 
     /**
+     * A single tree's own metadata (not its people) - used to resolve a slug from the URL into
+     * the tree id the rest of the API works with.
+     */
+    public function show(Request $request, Tree $tree): JsonResponse
+    {
+        abort_unless($tree->user_id === $request->user()->id, 404);
+
+        return response()->json($tree->loadCount('people'));
+    }
+
+    /**
      * Create a new tree with its first person (the only person with no relative to attach to).
      */
     public function store(Request $request): JsonResponse

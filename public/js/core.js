@@ -1,6 +1,14 @@
 "use strict";
 document.documentElement.setAttribute("data-bs-theme","dark");
 
+/* ======================= SCREEN (client-side routing) ======================= */
+/* app.blade.php renders both the dashboard and the editor into one DOM; SCREEN tracks which is
+   showing so code that used to ask "am I on trees.html or editor.html" (typeof Editor etc.) can
+   ask "is SCREEN 'app' or 'editor'" instead - that feature-detection trick stops working once both
+   scripts are always loaded together. */
+let SCREEN = window.INITIAL_VIEW === "editor" ? "editor" : "app";
+function showScreen(name){ $(".app-screen").removeClass("on"); $("#scr-"+name).addClass("on"); SCREEN=name; }
+
 /* ======================= ICONS ======================= */
 const sv=(d,w=16)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
 const I={

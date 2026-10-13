@@ -30,7 +30,7 @@ function treeMenu(t){
 }
 function cardHtml(t){
   const G=t.people_count||0;
-  return `<article class="tcard" data-open="${t.id}" tabindex="0" aria-label="Open ${esc(t.name)}">
+  return `<article class="tcard" data-open="${t.slug}" tabindex="0" aria-label="Open ${esc(t.name)}">
     <div class="prev" style="display:flex;align-items:center;justify-content:center;color:var(--muted)">${I.trees.replace(/width="20" height="20"/,'width="44" height="44"')}
       <div class="corner">
         <button class="ibtn star${t.starred?" on":""}" data-action="star" data-id="${t.id}" aria-label="${t.starred?"Unstar":"Star"} ${esc(t.name)}" aria-pressed="${!!t.starred}">${t.starred?I.star.replace('fill="none"','fill="currentColor"'):I.star}</button>
@@ -84,10 +84,21 @@ $("#langNe").on("change",function(){
     toast(this.checked?"Nepali is on. Add Nepali names when you add people, and switch language on any tree.":"Nepali is off.",this.checked?"ok":undefined); });
 });
 
-/* ---------- boot ---------- */
-(async function boot(){
-  const [settings,trees]=await Promise.all([Api.settings.get(),Api.trees.list()]);
-  AppSettings=settings; Trees=trees;
-  paintShell(); nav(curView);
-  $('[data-action="new-tree"]').prop("disabled",false);
-})();
+/* ---------- boot ----------
+   Called on first load when the dashboard is the initial screen, and again every time the user
+   navigates back from the editor (see closeEditor() in actions.js) - always a fresh fetch, shown
+   behind a loader, rather than trusting a possibly-stale cached Trees array. */
+async function bootApp(){
+  showScreen("app");
+  document.title="Family Tree";
+  $('[data-action="new-tree"]').prop("disabled",true);
+  $("#contentLoader").prop("hidden",false);
+  try{
+    const [settings,trees]=await Promise.all([Api.settings.get(),Api.trees.list()]);
+    AppSettings=settings; Trees=trees;
+    paintShell(); nav(curView);
+  } finally {
+    $("#contentLoader").prop("hidden",true);
+    $('[data-action="new-tree"]').prop("disabled",false);
+  }
+}

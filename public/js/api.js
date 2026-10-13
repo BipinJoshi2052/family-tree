@@ -27,6 +27,7 @@ function normalizePerson(p) {
 const Api = {
   trees: {
     list: () => $.get("/api/trees"),
+    show: (slug) => $.get(`/api/trees/${encodeURIComponent(slug)}`),
     create: (name, defaultLang, person) => $.post("/api/trees", { name, default_lang: defaultLang, person }),
     update: (id, data) => $.ajax({ url: `/api/trees/${id}`, method: "PATCH", data }),
     remove: (id) => $.ajax({ url: `/api/trees/${id}`, method: "DELETE" }),

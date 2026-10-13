@@ -71,7 +71,7 @@ circle.hub{fill:var(--line);transition:opacity .25s,fill .25s}
 path.gedge{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 5;animation:dash 1s linear infinite}
 @keyframes dash{to{stroke-dashoffset:-20}}
 @keyframes ghostIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
-.status{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--edge);border-radius:8px;box-shadow:0 10px 26px rgba(0,0,0,.45);padding:8px 14px;font-size:.84rem;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:5;color:var(--muted)}
+.status{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--edge);border-radius:8px;box-shadow:0 10px 26px rgba(0,0,0,.45);padding:8px 14px;font-size:.84rem;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:5;color:var(--muted);pointer-events:none}
 .status b{color:var(--ink)}
 .rel-chip{width:34px;height:34px;border-radius:50%;background:var(--c);display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
 .seg{display:inline-flex;background:var(--canvas);border:1px solid var(--edge);border-radius:8px;padding:3px;gap:3px}

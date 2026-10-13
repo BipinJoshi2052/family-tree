@@ -24,10 +24,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/trees', [PageController::class, 'trees'])->name('trees');
-    Route::get('/editor/{tree}', [PageController::class, 'editor'])->name('editor');
+    Route::get('/editor/{tree:slug}', [PageController::class, 'editor'])->name('editor');
 
     Route::prefix('api')->name('api.')->group(function () {
         Route::get('/trees', [TreeController::class, 'index'])->name('trees.index');
+        Route::get('/trees/{tree:slug}', [TreeController::class, 'show'])->name('trees.show');
         Route::post('/trees', [TreeController::class, 'store'])->name('trees.store');
         Route::patch('/trees/{tree}', [TreeController::class, 'update'])->name('trees.update');
         Route::delete('/trees/{tree}', [TreeController::class, 'destroy'])->name('trees.destroy');

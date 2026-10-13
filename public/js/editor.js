@@ -566,7 +566,7 @@ const Editor=(function(){
         .fail(xhr=>toast(apiErr(xhr),"danger")); });
   function layoutMenuHtml(){
     const opt=(k,label,sub)=>`<li><button class="dropdown-item${layoutMode===k?" on":""}" data-elayout="${k}"><span>${label}<br><small class="muted">${sub}</small></span>${layoutMode===k?'<span class="chk" style="margin-left:auto;color:var(--male)">✓</span>':""}</button></li>`;
-    return `<li class="note">Layout</li>${opt("default","Default","Compact, optimised for size")}${opt("tree","Tree","Branches out like a real tree - lines never overlap")}`;
+    return `<li class="note">Layout</li>${opt("tree","Tree","Branches out like a real tree - lines never overlap")}${opt("default","Compact","Optimised for size")}`;
   }
   $("#eMenu").on("click","[data-elayout]",function(){
     layoutMode=$(this).data("elayout"); try{ localStorage.setItem(LAYOUT_KEY(tree.id),layoutMode); }catch(_){}
@@ -606,7 +606,7 @@ const Editor=(function(){
       let saved=null; try{ saved=localStorage.getItem(LANG_KEY(t.id)); }catch(_){}
       lang = neOn() ? ((saved==="en"||saved==="ne")?saved:(t.defaultLang==="ne"?"ne":"en")) : "en";
       let savedLayout=null; try{ savedLayout=localStorage.getItem(LAYOUT_KEY(t.id)); }catch(_){}
-      layoutMode = savedLayout==="tree" ? "tree" : "default";
+      layoutMode = savedLayout==="default" ? "default" : "tree";
       let savedFilter=null; try{ savedFilter=localStorage.getItem(FILTER_KEY(t.id)); }catch(_){}
       filterMode = savedFilter==="blood" ? "blood" : "all";
       $("#search").val(""); $("#results").prop("hidden",true);
@@ -617,7 +617,7 @@ const Editor=(function(){
     treeName:()=>tree?tree.name:"",
     peopleCount:()=>people.length,
     header(){ if(tree){ header(); } },
-    renamed(name){ if(tree){ tree.name=name; header(); } },
+    renamed(name){ if(tree){ tree.name=name; header(); document.title=`${name} · Family Tree`; } },
     personRemoved(id){
       if(!tree) return;
       people.forEach(q=>{ if(q.fid===id) q.fid=null; if(q.mid===id) q.mid=null; if(q.pids&&q.pids.includes(id)) q.pids=q.pids.filter(x=>x!==id); });
@@ -629,9 +629,23 @@ const Editor=(function(){
 $("#eBack").on("click",()=>closeEditor());
 
 /* ======================= BOOT ======================= */
-(async function(){
-  const qp=new URLSearchParams(location.search), fresh=qp.get("fresh")==="1";
-  const [settings,people]=await Promise.all([Api.settings.get(),Api.people.list(window.TREE.id)]);
-  AppSettings=settings;
-  Editor.open({id:window.TREE.id,name:window.TREE.name,defaultLang:window.TREE.default_lang,people},"owner",fresh);
-})();
+/* Called on first load when the editor is the initial screen, and again every time the user opens
+   a tree from the dashboard (see openTree() in actions.js) or uses browser back/forward - always a
+   fresh fetch by slug, shown behind a loader, never trusting leftover state from a previous tree. */
+async function bootEditor(slug,fresh){
+  showScreen("editor");
+  $("#editorLoader").prop("hidden",false);
+  try{
+    const [settings,tree]=await Promise.all([Api.settings.get(),Api.trees.show(slug)]);
+    AppSettings=settings;
+    const people=await Api.people.list(tree.id);
+    document.title=`${tree.name} · Family Tree`;
+    Editor.open({id:tree.id,name:tree.name,defaultLang:tree.default_lang,people},"owner",fresh);
+  } finally {
+    $("#editorLoader").prop("hidden",true);
+  }
+}
+
+/* ======================= INITIAL BOOT (both screens live in this page; decide which starts active) ======================= */
+if(window.INITIAL_VIEW==="editor") bootEditor(window.INITIAL_TREE_SLUG,!!window.INITIAL_FRESH);
+else bootApp();
