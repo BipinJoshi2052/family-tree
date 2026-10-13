@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PersonController extends Controller
 {
@@ -131,7 +132,7 @@ class PersonController extends Controller
             $idMap = [];
             foreach ($included as $id) {
                 $source = $all[$id];
-                $img = $source->img && ! str_starts_with($source->img, 'images/') ? $source->img : null;
+                $isStoredFile = $source->img && str_starts_with($source->img, 'images/');
 
                 $new = $tree->people()->create([
                     'name' => $source->name,
@@ -145,10 +146,19 @@ class PersonController extends Controller
                     'location' => $source->location,
                     'residency' => $source->residency,
                     'bio' => $source->bio,
-                    'img' => $img,
+                    'img' => $isStoredFile ? null : $source->img,
                     'sort_order' => $source->sort_order,
                     'pids' => [],
                 ]);
+
+                // A server-stored photo's path is tied to the person's own id (images/<user>/<id>.jpg),
+                // so it can't just be copied as a string - the clone needs its own copy of the file
+                // at its own path, or deleting either person's photo later would delete the other's too.
+                if ($isStoredFile && Storage::disk('public')->exists($source->img)) {
+                    $newPath = "images/{$request->user()->id}/{$new->id}.jpg";
+                    Storage::disk('public')->copy($source->img, $newPath);
+                    $new->update(['img' => $newPath]);
+                }
 
                 $idMap[$id] = $new->id;
             }
