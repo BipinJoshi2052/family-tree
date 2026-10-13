@@ -39,6 +39,7 @@ class PersonController extends Controller
             'birthplace' => ['nullable', 'string', 'max:80'],
             'status' => ['required', 'in:living,deceased'],
             'death_date' => ['nullable', 'date'],
+            'residency' => ['sometimes', 'in:local,abroad'],
         ]);
 
         $relative = $tree->people()->findOrFail($data['relative_id']);
@@ -52,6 +53,7 @@ class PersonController extends Controller
                 'birthplace' => $data['birthplace'] ?? null,
                 'status' => $data['status'],
                 'death_date' => $data['status'] === 'deceased' ? ($data['death_date'] ?? null) : null,
+                'residency' => $data['residency'] ?? 'local',
                 'pids' => [],
             ]);
 

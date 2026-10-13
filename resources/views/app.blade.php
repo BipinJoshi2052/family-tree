@@ -126,7 +126,7 @@
 <form id="logoutForm" method="POST" action="{{ route('logout') }}" hidden>@csrf</form>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <input type="file" id="importFiles" accept=".json,application/json" hidden>
-<input type="file" id="dPhoto" accept="image/*" hidden>
+<input type="file" id="dPhoto" accept="image/*" class="visually-hidden">
 
 <!-- ============ MODALS ============ -->
 <div class="modal fade" id="newTreeModal" tabindex="-1" aria-labelledby="ntTitle" aria-hidden="true">
@@ -193,11 +193,12 @@
         </div>
         <div><span class="form-label d-block">Status</span><div class="seg" role="radiogroup" aria-label="Status"><input type="radio" name="fStatus" id="stLive" value="living" checked><label for="stLive">Living</label><input type="radio" name="fStatus" id="stDead" value="deceased"><label for="stDead">Deceased</label></div></div>
         <div id="deathWrap" hidden><label class="form-label" for="fDeath">Date of passing</label><input class="form-control" type="date" id="fDeath"></div>
+        <div><span class="form-label d-block">Residency</span><div class="seg" role="radiogroup" aria-label="Residency"><input type="radio" name="fResidency" id="fLocal" value="local" checked><label for="fLocal">In country</label><input type="radio" name="fResidency" id="fAbroad" value="abroad"><label for="fAbroad">Abroad</label></div></div>
         <div>
           <label class="form-label" for="fImg">Avatar image URL</label>
           <div class="av-row"><div class="av-prev" id="avPrev"></div>
             <div class="flex-grow-1" style="min-width:0"><input class="form-control" id="fImg" type="url" placeholder="https://…/photo.jpg">
-              <div class="d-flex align-items-center gap-2 mt-2"><label class="btn btn-quiet btn-sm mb-0" for="fFile">Upload photo</label><input type="file" id="fFile" accept="image/*" hidden><span class="form-text m-0" id="imgNote">Optional</span></div></div></div>
+              <div class="d-flex align-items-center gap-2 mt-2"><label class="btn btn-quiet btn-sm mb-0" for="fFile">Upload photo</label><input type="file" id="fFile" accept="image/*" class="visually-hidden"><span class="form-text m-0" id="imgNote">Optional</span></div></div></div>
         </div>
       </div>
       <div class="modal-footer"><button type="button" class="btn btn-quiet" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-go" id="addSubmit">Add</button></div>

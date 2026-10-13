@@ -292,6 +292,7 @@ const Editor=(function(){
         name:$("#fName").val().trim(), name_ne:ne||null, gender,
         birth_date:$("#fBirth").val()||null, birthplace:$("#fPlace").val().trim()||null,
         status:st, death_date:st==="deceased"?($("#fDeath").val()||null):null,
+        residency:$("input[name=fResidency]:checked").val(),
       });
       const n=normalizePerson(created);
       if(uploadBlob){ try{ const r=await Api.people.uploadPhoto(n.id,uploadBlob); n.img=r.img; n.updatedAt=Date.now(); }catch(_){ toast("Person added, but the photo couldn't be saved.","female"); } }
