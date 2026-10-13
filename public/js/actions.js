@@ -17,11 +17,22 @@ function closeEditor(){
   history.pushState({view:"app"},"","/trees");
   bootApp();
 }
-window.addEventListener("popstate",e=>{
-  const st=e.state;
-  if(st&&st.view==="editor") bootEditor(st.slug,!!st.fresh);
+/* Derives the screen from location.pathname itself rather than trusting event.state - some mobile
+   browsers fire a stray popstate on page load/restore (e.g. iOS Safari's tab suspend/resume) that
+   can carry a stale state object left over from an earlier SPA session, which would otherwise show
+   the wrong screen while the address bar still reads correctly. The URL is the one thing that's
+   always right, so every popstate - real back/forward or a spurious mobile one - re-derives from it. */
+function syncScreenToUrl(){
+  const m=location.pathname.match(/^\/editor\/([^/]+)/);
+  if(m) bootEditor(m[1],new URLSearchParams(location.search).get("fresh")==="1");
   else bootApp();
-});
+}
+window.addEventListener("popstate",syncScreenToUrl);
+/* Belt-and-braces for the same class of bug via a different mechanism: a page restored from the
+   browser's back-forward cache (bfcache, e.g. iOS Safari resuming a suspended tab) fires pageshow
+   with persisted=true instead of a fresh script run - re-sync in case the restored in-memory
+   SCREEN doesn't match wherever the address bar actually ended up. */
+window.addEventListener("pageshow",e=>{ if(e.persisted) syncScreenToUrl(); });
 
 const ntModal=$("#newTreeModal").length?new bootstrap.Modal("#newTreeModal"):null;
 const rnModal=new bootstrap.Modal("#renameModal"), cfModal=new bootstrap.Modal("#confirmModal");
