@@ -34,7 +34,6 @@ const Editor=(function(){
     if(layoutMode==="tree"){ SPOUSE_GAP=100; SIB_GAP=70; CLUSTER_GAP=150; ROOT_GAP=260; ROWH=400; BUS_STEP=20; }
     else { SPOUSE_GAP=60; SIB_GAP=34; CLUSTER_GAP=70; ROOT_GAP=160; ROWH=300; BUS_STEP=12; }
   }
-  const LAYOUT_KEY=id=>"ftLayout:"+id;
   let filterMode="all", visibleIds=null; // visibleIds: null = show everyone, else a Set of ids the "blood members" filter allows
   const FILTER_KEY=id=>"ftFilter:"+id;
   const cx=id=>pos[id].x+CW/2;
@@ -246,7 +245,7 @@ const Editor=(function(){
   $(document).on("keydown",e=>{ if(e.key==="Escape"&&!$(".modal.show").length){ select(null); $("#results").prop("hidden",true);} });
 
   /* add relative */
-  const addModal=new bootstrap.Modal("#addModal"); let addCtx=null, uploadData="";
+  const addModal=$("#addModal").length?new bootstrap.Modal("#addModal"):null; let addCtx=null, uploadData="";
   const REL={mother:"Mother",father:"Father",son:"Son",daughter:"Daughter"};
   function openAdd(id,rel){
     const p=byId[id]; const gender=(rel==="mother"||rel==="daughter")?"female":(rel==="father"||rel==="son")?"male":(p.gender==="male"?"female":"male");
@@ -317,8 +316,8 @@ const Editor=(function(){
   });
 
   /* details */
-  const detModal=new bootstrap.Modal("#detModal"); let detId=null;
-  const summaryModal=new bootstrap.Modal("#summaryModal");
+  const detModal=$("#detModal").length?new bootstrap.Modal("#detModal"):null; let detId=null;
+  const summaryModal=$("#summaryModal").length?new bootstrap.Modal("#summaryModal"):null;
   /* "Blood members": people related by descent, not by marriage - a son's wife or a daughter's
      husband who married in (no recorded parents of their own) doesn't count, even though they're
      part of the tree. Anyone with a recorded parent is blood by definition; a rootless person (no
@@ -570,7 +569,8 @@ const Editor=(function(){
     return `<li class="note">Layout</li>${opt("tree","Tree","Branches out like a real tree - lines never overlap")}${opt("default","Compact","Optimised for size")}`;
   }
   $("#eMenu").on("click","[data-elayout]",function(){
-    layoutMode=$(this).data("elayout"); try{ localStorage.setItem(LAYOUT_KEY(tree.id),layoutMode); }catch(_){}
+    layoutMode=$(this).data("elayout");
+    if(!ro()) Api.trees.update(tree.id,{layout:layoutMode}).catch(()=>{});
     render(); header(); fit(false);
     toast(layoutMode==="tree"?"Tree mode: each branch gets its own space, so lines don't cross.":"Default layout.");
   });
@@ -583,12 +583,13 @@ const Editor=(function(){
     const it=(a,ico,l,cls="")=>`<li><button class="dropdown-item ${cls}" data-action="${a}" data-id="${tree.id}">${ico}${l}</button></li>`;
     $("#eMenu").html(`<li><button class="dropdown-item" id="eSummaryBtn">${I.act}Summary</button></li>`+
       `<li><button class="dropdown-item" id="eFilterBtn">${I.filter}Filter${filterMode==="blood"?'<span class="pill" style="font-size:9px">Blood members</span>':""}</button></li>`+
-      '<li><hr class="dropdown-divider"></li>'+
-      it("rename",I.edit,"Rename tree")+
       '<li><hr class="dropdown-divider"></li>'+layoutMenuHtml()+
-      '<li><hr class="dropdown-divider"></li>'+it("delete",I.trash,"Delete tree","danger"));
+      (ro()?"":'<li><hr class="dropdown-divider"></li>'+
+        it("rename",I.edit,"Rename tree")+
+        `<li><button class="dropdown-item" id="eShareBtn">${I.share}Share</button></li>`+
+        '<li><hr class="dropdown-divider"></li>'+it("delete",I.trash,"Delete tree","danger")));
   }
-  const filterModal=new bootstrap.Modal("#filterModal");
+  const filterModal=$("#filterModal").length?new bootstrap.Modal("#filterModal"):null;
   $("#eMenu").on("click","#eFilterBtn",()=>{
     $(`input[name="flMode"][value="${filterMode}"]`).prop("checked",true);
     filterModal.show();
@@ -601,13 +602,28 @@ const Editor=(function(){
     render(); header();
     toast(filterMode==="blood"?"Showing blood members only - spouses are hidden.":"Showing everyone.");
   });
+  const shareModal=$("#shareModal").length?new bootstrap.Modal("#shareModal"):null;
+  $("#eMenu").on("click","#eShareBtn",async()=>{
+    shareModal.show();
+    $("#shLink").val("Generating link…");
+    try{ const res=await Api.trees.share(tree.id); $("#shLink").val(res.share_url); }
+    catch(e){ toast("Couldn't create a share link.","danger"); shareModal.hide(); }
+  });
+  $("#shCopy").on("click",()=>{
+    const val=$("#shLink").val();
+    try{ navigator.clipboard.writeText(val).then(()=>toast("Link copied.","ok"),()=>$("#shLink").trigger("select")); }
+    catch(_){ $("#shLink").trigger("select"); }
+  });
+  $("#shStop").on("click",async()=>{
+    try{ await Api.trees.unshare(tree.id); toast("Sharing turned off.","danger"); shareModal.hide(); }
+    catch(e){ toast("Couldn't turn off sharing.","danger"); }
+  });
 
   return {
     open(t,r,fresh){ tree=t; role=r; people=t.people; selected=null;
       let saved=null; try{ saved=localStorage.getItem(LANG_KEY(t.id)); }catch(_){}
       lang = neOn() ? ((saved==="en"||saved==="ne")?saved:(t.defaultLang==="ne"?"ne":"en")) : "en";
-      let savedLayout=null; try{ savedLayout=localStorage.getItem(LAYOUT_KEY(t.id)); }catch(_){}
-      layoutMode = savedLayout==="default" ? "default" : "tree";
+      layoutMode = t.layout==="default" ? "default" : "tree";
       let savedFilter=null; try{ savedFilter=localStorage.getItem(FILTER_KEY(t.id)); }catch(_){}
       filterMode = savedFilter==="blood" ? "blood" : "all";
       $("#search").val(""); $("#results").prop("hidden",true);
@@ -627,7 +643,7 @@ const Editor=(function(){
     },
   };
 })();
-$("#eBack").on("click",()=>closeEditor());
+$("#eBack").on("click",()=>{ if(window.SHARED_TOKEN){ location.href="/"; return; } closeEditor(); });
 
 /* ======================= BOOT ======================= */
 /* Called on first load when the editor is the initial screen, and again every time the user opens
@@ -641,12 +657,31 @@ async function bootEditor(slug,fresh){
     AppSettings=settings;
     const people=await Api.people.list(tree.id);
     document.title=`${tree.name} · Family Tree`;
-    Editor.open({id:tree.id,name:tree.name,defaultLang:tree.default_lang,people},"owner",fresh);
+    Editor.open({id:tree.id,name:tree.name,defaultLang:tree.default_lang,layout:tree.layout,people},"owner",fresh);
+  } finally {
+    $("#editorLoader").prop("hidden",true);
+  }
+}
+
+/* Public, read-only entry point (shared.blade.php) - fetches by share token instead of an
+   authenticated slug lookup, and opens the tree with role "viewer" so ro() hides every editing
+   control. AppSettings.ne is derived from the tree's own default_lang so the language switcher
+   shows up for a Nepali-language tree even though there's no signed-in account behind it. */
+async function bootShared(token){
+  showScreen("editor");
+  $("#editorLoader").prop("hidden",false);
+  try{
+    const data=await Api.shared.data(token);
+    AppSettings={name:"",email:"",color:"",name_ne:"",ne:data.tree.default_lang==="ne"};
+    const people=data.people.map(normalizePerson);
+    document.title=`${data.tree.name} · Family Tree`;
+    Editor.open({id:data.tree.id,name:data.tree.name,defaultLang:data.tree.default_lang,layout:data.tree.layout,people},"viewer",false);
   } finally {
     $("#editorLoader").prop("hidden",true);
   }
 }
 
 /* ======================= INITIAL BOOT (both screens live in this page; decide which starts active) ======================= */
-if(window.INITIAL_VIEW==="editor") bootEditor(window.INITIAL_TREE_SLUG,!!window.INITIAL_FRESH);
+if(window.SHARED_TOKEN) bootShared(window.SHARED_TOKEN);
+else if(window.INITIAL_VIEW==="editor") bootEditor(window.INITIAL_TREE_SLUG,!!window.INITIAL_FRESH);
 else bootApp();

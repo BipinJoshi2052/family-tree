@@ -36,6 +36,11 @@ const Api = {
       fd.append("file", file);
       return $.ajax({ url: "/api/trees/import", method: "POST", data: fd, processData: false, contentType: false });
     },
+    share: (id) => $.ajax({ url: `/api/trees/${id}/share`, method: "POST" }),
+    unshare: (id) => $.ajax({ url: `/api/trees/${id}/share`, method: "DELETE" }),
+  },
+  shared: {
+    data: (token) => $.get(`/api/shared/${encodeURIComponent(token)}`),
   },
   people: {
     list: (treeId) => $.get(`/api/trees/${treeId}/people`).then(rows => rows.map(normalizePerson)),

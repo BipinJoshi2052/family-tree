@@ -6,6 +6,7 @@ use App\Models\Tree;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class TreeController extends Controller
 {
@@ -67,7 +68,7 @@ class TreeController extends Controller
     }
 
     /**
-     * Rename a tree, toggle its star, or change its default display language.
+     * Rename a tree, toggle its star, or change its default display language or layout.
      */
     public function update(Request $request, Tree $tree): JsonResponse
     {
@@ -77,6 +78,7 @@ class TreeController extends Controller
             'name' => ['sometimes', 'string', 'max:60'],
             'starred' => ['sometimes', 'boolean'],
             'default_lang' => ['sometimes', 'in:en,ne'],
+            'layout' => ['sometimes', 'nullable', 'in:tree,default'],
         ]);
 
         $tree->update($data);
@@ -93,6 +95,32 @@ class TreeController extends Controller
 
         $tree->people->each(fn ($person) => $person->deletePhotoFile());
         $tree->delete();
+
+        return response()->json(['ok' => true]);
+    }
+
+    /**
+     * Turn on public read-only sharing for a tree, generating its link's token the first time.
+     */
+    public function share(Request $request, Tree $tree): JsonResponse
+    {
+        abort_unless($tree->user_id === $request->user()->id, 404);
+
+        if (! $tree->share_token) {
+            $tree->update(['share_token' => Str::random(32)]);
+        }
+
+        return response()->json(['share_token' => $tree->share_token, 'share_url' => url('/shared/'.$tree->share_token)]);
+    }
+
+    /**
+     * Turn off public sharing - the old link stops working immediately.
+     */
+    public function unshare(Request $request, Tree $tree): JsonResponse
+    {
+        abort_unless($tree->user_id === $request->user()->id, 404);
+
+        $tree->update(['share_token' => null]);
 
         return response()->json(['ok' => true]);
     }

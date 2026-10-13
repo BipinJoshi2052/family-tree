@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
-#[Fillable(['user_id', 'name', 'slug', 'starred', 'default_lang'])]
+#[Fillable(['user_id', 'name', 'slug', 'starred', 'default_lang', 'layout', 'share_token'])]
 class Tree extends Model
 {
     /**

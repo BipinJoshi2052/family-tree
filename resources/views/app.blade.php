@@ -239,6 +239,22 @@
   </div>
 </div>
 
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title" id="shTitle">Share this tree</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div>
+      <div class="modal-body">
+        <p class="muted">Anyone with this link can view the tree and everyone's details - they can't add, remove, or change anything.</p>
+        <div class="input-group">
+          <input type="text" class="form-control" id="shLink" readonly>
+          <button class="btn btn-quiet" type="button" id="shCopy">Copy</button>
+        </div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-quiet" style="color:#ff8a80" id="shStop">Stop sharing</button><button type="button" class="btn btn-quiet" data-bs-dismiss="modal">Close</button></div>
+    </div>
+  </div>
+</div>
+
 <script>
 window.INITIAL_VIEW = @json($initialView);
 window.INITIAL_TREE_SLUG = @json($treeSlug);

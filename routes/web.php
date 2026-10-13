@@ -5,6 +5,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PersonPhotoController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SharedTreeController;
 use App\Http\Controllers\TreeController;
 use App\Http\Controllers\TreeImportController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return auth()->check() ? redirect()->route('trees') : redirect()->route('welcome');
 });
+
+// Public read-only tree view - no auth, access is the token itself.
+Route::get('/shared/{token}', [SharedTreeController::class, 'show'])->name('shared.show');
+Route::get('/api/shared/{token}', [SharedTreeController::class, 'data'])->name('api.shared.data');
 
 Route::middleware('guest')->group(function () {
     Route::get('/welcome', [PageController::class, 'welcome'])->name('welcome');
@@ -33,6 +38,8 @@ Route::middleware('auth')->group(function () {
         Route::patch('/trees/{tree}', [TreeController::class, 'update'])->name('trees.update');
         Route::delete('/trees/{tree}', [TreeController::class, 'destroy'])->name('trees.destroy');
         Route::post('/trees/import', [TreeImportController::class, 'store'])->name('trees.import');
+        Route::post('/trees/{tree}/share', [TreeController::class, 'share'])->name('trees.share');
+        Route::delete('/trees/{tree}/share', [TreeController::class, 'unshare'])->name('trees.unshare');
 
         Route::get('/trees/{tree}/people', [PersonController::class, 'index'])->name('people.index');
         Route::post('/trees/{tree}/people', [PersonController::class, 'store'])->name('people.store');
