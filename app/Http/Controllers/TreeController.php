@@ -140,8 +140,10 @@ class TreeController extends Controller
     }
 
     /**
-     * A stored photo (images/{user}/{person}.jpg) only resolves on this server, so it's embedded
-     * as a data URI; an external URL or data URI already in the column is passed through untouched.
+     * A stored photo (images/{user}/{person}.jpg) is public with no auth required, so it's
+     * exported as that public URL rather than embedded - far smaller, and still openable directly
+     * in a browser. TreeImportController recognises this app's own storage URLs and copies the
+     * underlying file into the new tree, rather than leaving a cross-tree pointer.
      */
     private function exportImg(?string $img): ?string
     {
@@ -153,7 +155,7 @@ class TreeController extends Controller
             return null;
         }
 
-        return 'data:image/jpeg;base64,'.base64_encode(Storage::disk('public')->get($img));
+        return Storage::disk('public')->url($img);
     }
 
     /**

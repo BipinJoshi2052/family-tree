@@ -44,6 +44,7 @@ class TreeImportController extends Controller
 
                 $rawImg = $p['img'] ?? null;
                 $isDataUri = is_string($rawImg) && str_starts_with($rawImg, 'data:image/');
+                $ownPath = is_string($rawImg) ? $this->ownStoragePath($rawImg) : null;
 
                 $person = $tree->people()->create([
                     'name' => (string) $p['name'],
@@ -57,7 +58,7 @@ class TreeImportController extends Controller
                     'location' => $p['location'] ?? null,
                     'residency' => ($p['residency'] ?? 'local') === 'abroad' ? 'abroad' : 'local',
                     'bio' => $p['bio'] ?? null,
-                    'img' => $isDataUri ? null : $this->sanitizeImg($rawImg),
+                    'img' => ($isDataUri || $ownPath) ? null : $this->sanitizeImg($rawImg),
                     'sort_order' => is_int($p['sortOrder'] ?? null) ? $p['sortOrder'] : null,
                 ]);
 
@@ -66,6 +67,10 @@ class TreeImportController extends Controller
                     if ($path) {
                         $person->update(['img' => $path]);
                     }
+                } elseif ($ownPath && Storage::disk('public')->exists($ownPath)) {
+                    $newPath = "images/{$request->user()->id}/{$person->id}.jpg";
+                    Storage::disk('public')->copy($ownPath, $newPath);
+                    $person->update(['img' => $newPath]);
                 }
 
                 $idMap[(string) $p['id']] = $person->id;
@@ -123,6 +128,26 @@ class TreeImportController extends Controller
         }
 
         return '@auto';
+    }
+
+    /**
+     * If this URL points at one of THIS app's own public storage files (i.e. a photo exported by
+     * TreeController::export), return its disk-relative path so the caller can copy the underlying
+     * file into the new tree - otherwise the import would just leave a pointer back at the
+     * original tree's photo, which breaks if that tree's photo is later replaced or deleted.
+     * A genuinely external URL (anything else) returns null and is kept as a plain link instead.
+     */
+    private function ownStoragePath(string $value): ?string
+    {
+        $base = rtrim((string) config('filesystems.disks.public.url'), '/').'/';
+
+        if ($base === '/' || ! str_starts_with($value, $base)) {
+            return null;
+        }
+
+        $path = ltrim(substr($value, strlen($base)), '/');
+
+        return $path !== '' ? $path : null;
     }
 
     /**
