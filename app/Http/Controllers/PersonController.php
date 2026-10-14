@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PersonController extends Controller
 {
@@ -244,16 +245,64 @@ class PersonController extends Controller
             'residency' => ['sometimes', 'in:local,abroad'],
             'bio' => ['sometimes', 'nullable', 'string', 'max:600'],
             'sort_order' => ['sometimes', 'nullable', 'integer', 'min:0'],
+            'father_id' => ['sometimes', 'nullable', 'integer', Rule::exists('people', 'id')->where('tree_id', $person->tree_id)],
+            'mother_id' => ['sometimes', 'nullable', 'integer', Rule::exists('people', 'id')->where('tree_id', $person->tree_id)],
         ]);
 
         if (($data['status'] ?? $person->status) !== 'deceased') {
             $data['death_date'] = null;
         }
 
+        foreach (['father_id', 'mother_id'] as $slot) {
+            if (! array_key_exists($slot, $data) || ! $data[$slot]) {
+                continue;
+            }
+            if ($data[$slot] === $person->id) {
+                return response()->json(['message' => 'A person cannot be their own parent.'], 422);
+            }
+            if (in_array($data[$slot], $this->descendantIds($person), true)) {
+                return response()->json(['message' => 'That person is already recorded as a descendant, so they cannot also be a parent here.'], 422);
+            }
+        }
+
         $person->update($data);
+
+        // Editing a parent link directly (rather than through the "add relative" ghosts, which
+        // already do this) should still marry the two parents to one another once both are set,
+        // same as linkParent() does - otherwise this is the one path that can leave a child with
+        // two recorded parents who aren't shown as spouses of each other.
+        if ((array_key_exists('father_id', $data) || array_key_exists('mother_id', $data)) && $person->father_id && $person->mother_id) {
+            $this->linkPartners($person->father, $person->mother);
+        }
+
         $person->tree->touch();
 
         return response()->json($person->fresh());
+    }
+
+    /**
+     * Every descendant of `$person` (children, grandchildren, ...) - used to stop a parent-link
+     * edit from pointing at someone already below `$person` in the tree, which would create a cycle.
+     *
+     * @return array<int, int>
+     */
+    private function descendantIds(Person $person): array
+    {
+        $all = $person->tree->people()->get(['id', 'father_id', 'mother_id']);
+        $ids = [];
+        $queue = [$person->id];
+
+        while ($queue) {
+            $curId = array_pop($queue);
+            foreach ($all as $candidate) {
+                if (($candidate->father_id === $curId || $candidate->mother_id === $curId) && ! in_array($candidate->id, $ids, true)) {
+                    $ids[] = $candidate->id;
+                    $queue[] = $candidate->id;
+                }
+            }
+        }
+
+        return $ids;
     }
 
     /**

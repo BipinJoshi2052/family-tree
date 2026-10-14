@@ -422,11 +422,29 @@ const Editor=(function(){
       <div class="d-sec"><h6>Biography</h6><p class="bio">${p.bio?esc(p.bio):'<span class="muted">No notes yet.</span>'}</p></div>
       ${removeSec}`;
   }
+  /* Every descendant of id (children, grandchildren, ...), so the father/mother pickers below can't
+     offer someone already below this person - picking one would create a cycle. */
+  function descendantIdsOf(id){
+    const result=new Set(), queue=[id];
+    while(queue.length){ const cur=queue.shift();
+      people.forEach(c=>{ if((c.fid===cur||c.mid===cur)&&!result.has(c.id)){ result.add(c.id); queue.push(c.id); } }); }
+    return result;
+  }
+  function parentSelect(p,fieldId,gender,current,excl){
+    const opts=people.filter(c=>c.gender===gender&&c.id!==p.id&&!excl.has(c.id))
+      .map(c=>`<option value="${c.id}"${c.id===current?" selected":""}>${esc(dn(c))}</option>`).join("");
+    return `<select class="form-select" id="${fieldId}"><option value=""${current?"":" selected"}>Not recorded</option>${opts}</select>`;
+  }
   function detEditHtml(p){
+    const excl=descendantIdsOf(p.id); excl.add(p.id);
     return `<form id="detEditForm" novalidate class="d-grid gap-3">
       <div><label class="form-label" for="deName">Full name</label><input class="form-control" id="deName" required maxlength="80" value="${esc(p.name)}"><div class="invalid-feedback">Enter a name.</div></div>
       ${neOn()?`<div><label class="form-label" for="deNameNe">Nepali name · नेपाली नाम</label><input class="form-control" id="deNameNe" lang="ne" maxlength="80" value="${esc(p.nameNe||"")}" placeholder="जस्तै: राम बहादुर श्रेष्ठ"></div>`:""}
       <div><span class="form-label d-block">Gender</span><div class="seg" role="radiogroup" aria-label="Gender"><input type="radio" name="deGender" id="deGm" value="male"${p.gender==="male"?" checked":""}><label for="deGm">Male</label><input type="radio" name="deGender" id="deGf" value="female"${p.gender==="female"?" checked":""}><label for="deGf">Female</label></div></div>
+      <div class="row g-3">
+        <div class="col-sm-6"><label class="form-label" for="deFather">Father</label>${parentSelect(p,"deFather","male",p.fid,excl)}</div>
+        <div class="col-sm-6"><label class="form-label" for="deMother">Mother</label>${parentSelect(p,"deMother","female",p.mid,excl)}</div>
+      </div>
       <div class="row g-3">
         <div class="col-sm-6"><label class="form-label" for="deBirth">Birth date</label><input class="form-control" type="date" id="deBirth" value="${p.birthDate||""}"></div>
         <div class="col-sm-6"><label class="form-label" for="dePlace">Birthplace</label><input class="form-control" id="dePlace" maxlength="80" value="${esc(p.birthplace||"")}"></div>
@@ -494,12 +512,14 @@ const Editor=(function(){
     e.preventDefault(); if(!this.checkValidity()){ $(this).addClass("was-validated"); return; }
     const p=byId[detId];
     const st=$("input[name=deStatus]:checked").val();
+    const fatherId=$("#deFather").val()||null, motherId=$("#deMother").val()||null;
     const payload={
       name:$("#deName").val().trim(), gender:$("input[name=deGender]:checked").val(),
       birth_date:$("#deBirth").val()||null, birthplace:$("#dePlace").val().trim()||null,
       status:st, death_date:st==="deceased"?($("#deDeath").val()||null):null,
       phone:$("#dePhone").val().trim()||null, location:$("#deLocation").val().trim()||null,
       residency:$("input[name=deResidency]:checked").val(), bio:$("#deBio").val().trim()||null,
+      father_id:fatherId, mother_id:motherId,
     };
     if(neOn()) payload.name_ne=$("#deNameNe").val().trim()||null;
     const $btn=$(this).find('button[type="submit"]'); $btn.prop("disabled",true);
@@ -507,7 +527,14 @@ const Editor=(function(){
       await Api.people.update(p.id,payload);
       Object.assign(p,{name:payload.name,nameNe:payload.name_ne,gender:payload.gender,birthDate:payload.birth_date||"",
         birthplace:payload.birthplace||"",status:payload.status,deathDate:payload.death_date||"",
-        phone:payload.phone||"",location:payload.location||"",residency:payload.residency,bio:payload.bio||""});
+        phone:payload.phone||"",location:payload.location||"",residency:payload.residency,bio:payload.bio||"",
+        fid:fatherId?+fatherId:null,mid:motherId?+motherId:null});
+      /* Mirror the backend's auto-marry: if both parents are now set, they should show as each
+         other's spouse locally too, same fix as the add-relative flow already needed for this. */
+      if(p.fid&&p.mid){
+        const f=byId[p.fid], m=byId[p.mid];
+        if(f&&m){ if(!f.pids.includes(m.id)) f.pids.push(m.id); if(!m.pids.includes(f.id)) m.pids.push(f.id); }
+      }
       render(); header(); paintDetail(); toast(`Saved ${p.name}'s details.`,"ok");
     }catch(xhr){ toast(apiErr(xhr),"danger"); }
     finally{ $btn.prop("disabled",false); }
