@@ -430,19 +430,26 @@ const Editor=(function(){
       people.forEach(c=>{ if((c.fid===cur||c.mid===cur)&&!result.has(c.id)){ result.add(c.id); queue.push(c.id); } }); }
     return result;
   }
-  /* Candidates for a parent slot: if it's already set, lock to just that one person (plus "Not
-     recorded" to clear it) rather than offering to swap in someone unrelated. If it's empty but
-     the OTHER parent slot is already known, offer only that parent's recorded spouse(s) - usually
-     exactly one, but could be several for someone with more than one marriage on record - instead
-     of every person of the matching gender in the tree. Only falls back to the full list when
-     there's no known parent to anchor against, or that parent has no recorded spouse at all. */
+  /* Candidates for a parent slot, in priority order:
+     1. If the OTHER parent slot is already known, offer THAT parent's recorded spouse(s) - this
+        applies whether or not this slot is already filled, so e.g. a father with two recorded
+        wives offers both as the mother option for any of his children, not just whichever one
+        happens to already be recorded - letting a wrong pick be corrected, not just confirmed.
+     2. Otherwise, if this slot is already set (and the other parent gave us nothing to anchor on),
+        lock to just that one person rather than offering to swap in someone unrelated.
+     3. Otherwise, fall back to everyone of the matching gender in the tree.
+     The current value is always included even if step 1's spouse list doesn't happen to contain it
+     (e.g. imported data where pids wasn't kept in sync with father_id/mother_id) - otherwise saving
+     the form unchanged could silently clear a value that just didn't show up as selected. */
   function parentCandidates(p,gender,currentId,otherParentId,excl){
-    if(currentId&&byId[currentId]) return [byId[currentId]];
+    let candidates=[];
     if(otherParentId&&byId[otherParentId]){
-      const spouses=byId[otherParentId].pids.map(id=>byId[id]).filter(c=>c&&c.gender===gender&&!excl.has(c.id));
-      if(spouses.length) return spouses;
+      candidates=byId[otherParentId].pids.map(id=>byId[id]).filter(c=>c&&c.gender===gender&&!excl.has(c.id));
     }
-    return people.filter(c=>c.gender===gender&&c.id!==p.id&&!excl.has(c.id));
+    if(!candidates.length&&currentId&&byId[currentId]) candidates=[byId[currentId]];
+    if(!candidates.length) candidates=people.filter(c=>c.gender===gender&&c.id!==p.id&&!excl.has(c.id));
+    if(currentId&&byId[currentId]&&!candidates.some(c=>c.id===currentId)) candidates=[byId[currentId],...candidates];
+    return candidates;
   }
   function parentSelect(p,fieldId,gender,currentId,otherParentId,excl){
     const opts=parentCandidates(p,gender,currentId,otherParentId,excl)
