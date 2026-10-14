@@ -430,10 +430,24 @@ const Editor=(function(){
       people.forEach(c=>{ if((c.fid===cur||c.mid===cur)&&!result.has(c.id)){ result.add(c.id); queue.push(c.id); } }); }
     return result;
   }
-  function parentSelect(p,fieldId,gender,current,excl){
-    const opts=people.filter(c=>c.gender===gender&&c.id!==p.id&&!excl.has(c.id))
-      .map(c=>`<option value="${c.id}"${c.id===current?" selected":""}>${esc(dn(c))}</option>`).join("");
-    return `<select class="form-select" id="${fieldId}"><option value=""${current?"":" selected"}>Not recorded</option>${opts}</select>`;
+  /* Candidates for a parent slot: if it's already set, lock to just that one person (plus "Not
+     recorded" to clear it) rather than offering to swap in someone unrelated. If it's empty but
+     the OTHER parent slot is already known, offer only that parent's recorded spouse(s) - usually
+     exactly one, but could be several for someone with more than one marriage on record - instead
+     of every person of the matching gender in the tree. Only falls back to the full list when
+     there's no known parent to anchor against, or that parent has no recorded spouse at all. */
+  function parentCandidates(p,gender,currentId,otherParentId,excl){
+    if(currentId&&byId[currentId]) return [byId[currentId]];
+    if(otherParentId&&byId[otherParentId]){
+      const spouses=byId[otherParentId].pids.map(id=>byId[id]).filter(c=>c&&c.gender===gender&&!excl.has(c.id));
+      if(spouses.length) return spouses;
+    }
+    return people.filter(c=>c.gender===gender&&c.id!==p.id&&!excl.has(c.id));
+  }
+  function parentSelect(p,fieldId,gender,currentId,otherParentId,excl){
+    const opts=parentCandidates(p,gender,currentId,otherParentId,excl)
+      .map(c=>`<option value="${c.id}"${c.id===currentId?" selected":""}>${esc(dn(c))}</option>`).join("");
+    return `<select class="form-select" id="${fieldId}"><option value=""${currentId?"":" selected"}>Not recorded</option>${opts}</select>`;
   }
   function detEditHtml(p){
     const excl=descendantIdsOf(p.id); excl.add(p.id);
@@ -442,8 +456,8 @@ const Editor=(function(){
       ${neOn()?`<div><label class="form-label" for="deNameNe">Nepali name · नेपाली नाम</label><input class="form-control" id="deNameNe" lang="ne" maxlength="80" value="${esc(p.nameNe||"")}" placeholder="जस्तै: राम बहादुर श्रेष्ठ"></div>`:""}
       <div><span class="form-label d-block">Gender</span><div class="seg" role="radiogroup" aria-label="Gender"><input type="radio" name="deGender" id="deGm" value="male"${p.gender==="male"?" checked":""}><label for="deGm">Male</label><input type="radio" name="deGender" id="deGf" value="female"${p.gender==="female"?" checked":""}><label for="deGf">Female</label></div></div>
       <div class="row g-3">
-        <div class="col-sm-6"><label class="form-label" for="deFather">Father</label>${parentSelect(p,"deFather","male",p.fid,excl)}</div>
-        <div class="col-sm-6"><label class="form-label" for="deMother">Mother</label>${parentSelect(p,"deMother","female",p.mid,excl)}</div>
+        <div class="col-sm-6"><label class="form-label" for="deFather">Father</label>${parentSelect(p,"deFather","male",p.fid,p.mid,excl)}</div>
+        <div class="col-sm-6"><label class="form-label" for="deMother">Mother</label>${parentSelect(p,"deMother","female",p.mid,p.fid,excl)}</div>
       </div>
       <div class="row g-3">
         <div class="col-sm-6"><label class="form-label" for="deBirth">Birth date</label><input class="form-control" type="date" id="deBirth" value="${p.birthDate||""}"></div>
