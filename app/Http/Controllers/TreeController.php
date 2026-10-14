@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Person;
 use App\Models\Tree;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TreeController extends Controller
@@ -97,6 +99,61 @@ class TreeController extends Controller
         $tree->delete();
 
         return response()->json(['ok' => true]);
+    }
+
+    /**
+     * A tree's full data as a standalone JSON file (matching TreeImportController's shape), with
+     * any server-stored photo embedded as a base64 data URI so the file can be edited elsewhere
+     * (e.g. to regenerate names) and re-imported with photos intact, with no separate images folder.
+     */
+    public function export(Request $request, Tree $tree): JsonResponse
+    {
+        abort_unless($tree->user_id === $request->user()->id, 404);
+
+        return response()->json([
+            'app' => 'Family Tree',
+            'version' => 1,
+            'name' => $tree->name,
+            'starred' => $tree->starred,
+            'defaultLang' => $tree->default_lang,
+            'layout' => $tree->layout,
+            'people' => $tree->people->map(fn (Person $p) => [
+                'id' => $p->id,
+                'name' => $p->name,
+                'nameNe' => $p->name_ne,
+                'gender' => $p->gender,
+                'birthDate' => $p->birth_date?->format('Y-m-d'),
+                'status' => $p->status,
+                'deathDate' => $p->death_date?->format('Y-m-d'),
+                'birthplace' => $p->birthplace,
+                'phone' => $p->phone,
+                'location' => $p->location,
+                'residency' => $p->residency,
+                'bio' => $p->bio,
+                'img' => $this->exportImg($p->img),
+                'fid' => $p->father_id,
+                'mid' => $p->mother_id,
+                'pids' => $p->pids,
+                'sortOrder' => $p->sort_order,
+            ])->values(),
+        ]);
+    }
+
+    /**
+     * A stored photo (images/{user}/{person}.jpg) only resolves on this server, so it's embedded
+     * as a data URI; an external URL or data URI already in the column is passed through untouched.
+     */
+    private function exportImg(?string $img): ?string
+    {
+        if (! $img || ! str_starts_with($img, 'images/')) {
+            return $img;
+        }
+
+        if (! Storage::disk('public')->exists($img)) {
+            return null;
+        }
+
+        return 'data:image/jpeg;base64,'.base64_encode(Storage::disk('public')->get($img));
     }
 
     /**

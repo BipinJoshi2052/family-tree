@@ -656,9 +656,16 @@ const Editor=(function(){
       '<li><hr class="dropdown-divider"></li>'+layoutMenuHtml()+
       (ro()?"":'<li><hr class="dropdown-divider"></li>'+
         it("rename",I.edit,"Rename tree")+
+        `<li><button class="dropdown-item" id="eDownloadBtn">${I.dl}Download JSON file</button></li>`+
         `<li><button class="dropdown-item" id="eShareBtn">${I.share}Share</button></li>`+
         '<li><hr class="dropdown-divider"></li>'+it("delete",I.trash,"Delete tree","danger")));
   }
+  $("#eMenu").on("click","#eDownloadBtn",()=>{
+    const a=document.createElement("a");
+    a.href=`/api/trees/${tree.id}/export`;
+    a.download=(String(tree.name||"tree").replace(/[\\/:*?"<>|\u0000-\u001f]/g,"-").replace(/\s+/g," ").trim().slice(0,120)||"tree")+".json";
+    document.body.appendChild(a); a.click(); a.remove();
+  });
   const filterModal=$("#filterModal").length?new bootstrap.Modal("#filterModal"):null;
   $("#eMenu").on("click","#eFilterBtn",()=>{
     $(`input[name="flMode"][value="${filterMode}"]`).prop("checked",true);

@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/trees/{tree}', [TreeController::class, 'update'])->name('trees.update');
         Route::delete('/trees/{tree}', [TreeController::class, 'destroy'])->name('trees.destroy');
         Route::post('/trees/import', [TreeImportController::class, 'store'])->name('trees.import');
+        Route::get('/trees/{tree}/export', [TreeController::class, 'export'])->name('trees.export');
         Route::post('/trees/{tree}/share', [TreeController::class, 'share'])->name('trees.share');
         Route::delete('/trees/{tree}/share', [TreeController::class, 'unshare'])->name('trees.unshare');
 

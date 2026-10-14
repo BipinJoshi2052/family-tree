@@ -6,6 +6,7 @@ use App\Models\Person;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TreeImportController extends Controller
 {
@@ -31,6 +32,7 @@ class TreeImportController extends Controller
                 'name' => is_string($raw['name'] ?? null) ? $raw['name'] : 'Imported tree',
                 'starred' => (bool) ($raw['starred'] ?? false),
                 'default_lang' => ($raw['defaultLang'] ?? 'en') === 'ne' ? 'ne' : 'en',
+                'layout' => in_array($raw['layout'] ?? null, ['tree', 'default'], true) ? $raw['layout'] : null,
             ]);
 
             $idMap = [];
@@ -40,6 +42,9 @@ class TreeImportController extends Controller
                     continue;
                 }
 
+                $rawImg = $p['img'] ?? null;
+                $isDataUri = is_string($rawImg) && str_starts_with($rawImg, 'data:image/');
+
                 $person = $tree->people()->create([
                     'name' => (string) $p['name'],
                     'name_ne' => $p['nameNe'] ?? null,
@@ -48,9 +53,20 @@ class TreeImportController extends Controller
                     'status' => ($p['status'] ?? 'living') === 'deceased' ? 'deceased' : 'living',
                     'death_date' => $this->validDate($p['deathDate'] ?? null),
                     'birthplace' => $p['birthplace'] ?? null,
+                    'phone' => $p['phone'] ?? null,
+                    'location' => $p['location'] ?? null,
+                    'residency' => ($p['residency'] ?? 'local') === 'abroad' ? 'abroad' : 'local',
                     'bio' => $p['bio'] ?? null,
-                    'img' => $this->sanitizeImg($p['img'] ?? null),
+                    'img' => $isDataUri ? null : $this->sanitizeImg($rawImg),
+                    'sort_order' => is_int($p['sortOrder'] ?? null) ? $p['sortOrder'] : null,
                 ]);
+
+                if ($isDataUri) {
+                    $path = $this->storeDataUriPhoto($rawImg, $request->user()->id, $person->id);
+                    if ($path) {
+                        $person->update(['img' => $path]);
+                    }
+                }
 
                 $idMap[(string) $p['id']] = $person->id;
             }
@@ -87,11 +103,10 @@ class TreeImportController extends Controller
     }
 
     /**
-     * Keep data URIs and http(s) URLs as-is; anything that looks like a path into the old app's
-     * local "images/..." folder won't resolve here, so fall back to the generated placeholder.
-     * The `img` column is a varchar(255): embedded base64 data URIs from old exports routinely
-     * run far longer than that, so one that won't fit is skipped (placeholder) instead of failing
-     * the whole import with a database truncation error.
+     * Keep http(s) URLs as-is; anything that looks like a path into the old app's local
+     * "images/..." folder won't resolve here, so fall back to the generated placeholder. Image
+     * data URIs are handled separately (storeDataUriPhoto) since the `img` column is a varchar(255)
+     * and can't hold one directly.
      */
     private function sanitizeImg(mixed $value): ?string
     {
@@ -103,10 +118,32 @@ class TreeImportController extends Controller
             return $value;
         }
 
-        if (str_starts_with($value, 'data:') || str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
             return strlen($value) <= 255 ? $value : '@auto';
         }
 
         return '@auto';
+    }
+
+    /**
+     * Decode an embedded "data:image/...;base64,..." photo and write it to its own file, keyed by
+     * the new person's own id (mirrors PersonController::branch()'s clone-photo handling) - the
+     * `img` column then stores just the short path, not the whole image.
+     */
+    private function storeDataUriPhoto(string $value, int $userId, int $personId): ?string
+    {
+        if (! preg_match('/^data:image\/[a-zA-Z0-9.+-]+;base64,(.+)$/', $value, $m)) {
+            return null;
+        }
+
+        $binary = base64_decode($m[1], true);
+        if ($binary === false) {
+            return null;
+        }
+
+        $path = "images/{$userId}/{$personId}.jpg";
+        Storage::disk('public')->put($path, $binary);
+
+        return $path;
     }
 }
